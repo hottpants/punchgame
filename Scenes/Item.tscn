@@ -1,0 +1,22 @@
+[gd_scene load_steps=2 format=3 uid="uid://ulc7of288twl"]
+
+[ext_resource type="Script" uid="uid://dtl3stfgkkeny" path="res://Scripts/shop_item.gd" id="1_3r01x"]
+
+[node name="ShopItem" type="Node2D" node_paths=PackedStringArray("label", "button")]
+script = ExtResource("1_3r01x")
+label = NodePath("Item/ItemName")
+button = NodePath("Item/BuyButton")
+metadata/_custom_type_script = "uid://dtl3stfgkkeny"
+
+[node name="Item" type="HBoxContainer" parent="."]
+alignment = 1
+
+[node name="ItemName" type="Label" parent="Item"]
+layout_mode = 2
+text = "Item 1 | Cost: $0       "
+
+[node name="BuyButton" type="Button" parent="Item"]
+layout_mode = 2
+text = "BUY"
+
+[connection signal="pressed" from="Item/BuyButton" to="." method="_on_buy_button_pressed"]

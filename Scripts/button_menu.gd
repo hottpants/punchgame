@@ -12,5 +12,5 @@ func _process(delta: float) -> void:
 
 
 func _on_big_button_pressed() -> void:
-	get_tree().change_scene_to_file("res://Scenes/game.tscn")
+	get_tree().change_scene_to_file("res://Scenes/shop.tscn")
 	pass # Replace with function body.

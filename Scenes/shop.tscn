@@ -1,0 +1,31 @@
+[gd_scene load_steps=3 format=3 uid="uid://dtfw0n83xox4f"]
+
+[ext_resource type="Script" uid="uid://brrj4xn0272m0" path="res://Scripts/shop.gd" id="1_a0mxf"]
+[ext_resource type="PackedScene" uid="uid://ulc7of288twl" path="res://Scenes/Item.tscn" id="2_2shtd"]
+
+[node name="shop" type="Node2D"]
+script = ExtResource("1_a0mxf")
+cash = 100
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+offset_left = 2.0
+offset_top = 154.0
+offset_right = 203.0
+offset_bottom = 194.0
+
+[node name="Item" parent="VBoxContainer" instance=ExtResource("2_2shtd")]
+
+[node name="Item2" parent="VBoxContainer" instance=ExtResource("2_2shtd")]
+position = Vector2(0, 32)
+
+[node name="Cash" type="Label" parent="."]
+offset_left = 50.0
+offset_top = 105.0
+offset_right = 109.0
+offset_bottom = 128.0
+text = "MONEY"
+
+[node name="ItemContainer" type="HBoxContainer" parent="."]
+offset_top = 1.0
+offset_right = 1150.0
+offset_bottom = 41.0

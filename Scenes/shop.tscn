@@ -18,6 +18,9 @@ offset_bottom = 194.0
 [node name="Item2" parent="VBoxContainer" instance=ExtResource("2_2shtd")]
 position = Vector2(0, 32)
 
+[node name="Item3" parent="VBoxContainer" instance=ExtResource("2_2shtd")]
+position = Vector2(1, 64)
+
 [node name="Cash" type="Label" parent="."]
 offset_left = 50.0
 offset_top = 105.0

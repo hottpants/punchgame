@@ -17,11 +17,5 @@ func _set_stats(new_name : String, new_cost : int):
 	cost = new_cost
 	label.text = itemName + " | Cost: $" + str(cost) + "       "
 
-
-
-	
-	
-
-
 func _on_buy_button_pressed() -> void:
 	decreaseMoney.emit(itemName, cost)

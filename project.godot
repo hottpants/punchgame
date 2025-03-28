@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="ReidGame"
+config/name="Punchgame"
 run/main_scene="uid://dpbj8ww84lf66"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"

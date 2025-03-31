@@ -4,20 +4,21 @@ extends Node2D
 @export var num_shop_items = 4
 var items : Array
 var shop_items_arr : Array
+@export var refresh_cost = 5
 # Called when the node enters the scene tree for the first time.
 
 func _ready() -> void:
 	
 	# Dictionaries right here are used to keep track of what each item does, its cost, and other important info
 	
-	var balls_item = {"Name": "Balls", "Cost": 2, "Chance": 1, "Description": "A pair of firm balls", "Location": 0, "id": 0}
-	var peenor_item = {"Name": "Peenor", "Cost": 1, "Chance": 1, "Description": "A firm shaft", "Location": 0, "id": 1}
-	var brassknuckles_item = {"Name": "Brass Knuckles", "Cost": 25, "Chance": 2, "Description": "For punching things", "Location": 0, "id": 2}
-	var jockstrap_item = {"Name": "Jock Strap", "Cost": 6, "Chance": 4, "Description": "You'd look good in it", "Location": 0, "id": 3}
-	var bong_item = {"Name": "Bong", "Cost": 42, "Chance": 3, "Description": "Hell yea", "Location": 0, "id": 4}
-	var holyhandgrenade_item = {"Name": "Holy Hand Grenade", "Cost": 1000, "Chance": 4, "Description": "Total annihilation", "Location": 0, "id": 5}
-	var gun_item = {"Name": "Gun", "Cost": 63, "Chance": 3, "Description": "Parry this!", "Location": 0, "id": 6}
-	var baseballbat_item = {"Name": "Baseball Bat", "Cost": 17, "Chance": 3, "Description": "Guh!", "Location": 0, "id": 7}
+	var balls_item = {"Name": "Balls", "Cost": 2, "Chance": 1, "Description": "A pair of firm balls", "id": 0}
+	var peenor_item = {"Name": "Peenor", "Cost": 1, "Chance": 1, "Description": "A firm shaft", "id": 1}
+	var brassknuckles_item = {"Name": "Brass Knuckles", "Cost": 25, "Chance": 2, "Description": "For punching things", "id": 2}
+	var jockstrap_item = {"Name": "Jock Strap", "Cost": 6, "Chance": 4, "Description": "You'd look good in it", "id": 3}
+	var bong_item = {"Name": "Bong", "Cost": 42, "Chance": 3, "Description": "Hell yea", "id": 4}
+	var holyhandgrenade_item = {"Name": "Holy Hand Grenade", "Cost": 1000, "Chance": 4, "Description": "Total annihilation", "id": 5}
+	var gun_item = {"Name": "Gun", "Cost": 63, "Chance": 3, "Description": "Parry this!", "id": 6}
+	var baseballbat_item = {"Name": "Baseball Bat", "Cost": 17, "Chance": 3, "Description": "Guh!", "id": 7}
 	
 	# Array of dictionaries to keep them all in one spot
 	
@@ -26,6 +27,7 @@ func _ready() -> void:
 	# Creates an array of all of the items currently in the shop
 	
 	shop_items_arr = _create_shop(num_shop_items, items)
+	$Button.text = "REFRESH $" + str(refresh_cost)
 	
 # Called when the buy button corresponding to an item is clicked. Signal emitted from shop_item.gd
 
@@ -148,6 +150,14 @@ func _process(delta: float) -> void:
 
 func _on_button_pressed() -> void:
 	# Reid, I would like you to work with me to make the refresh button increase in cost every time it is clicked
-	for i in shop_items_arr:
-		i.queue_free()
-	shop_items_arr = _create_shop(num_shop_items, items)
+	if((cash - refresh_cost) >= 0):
+		cash -= refresh_cost
+		
+		refresh_cost += 1
+		$Button.text = "REFRESH $" + str(refresh_cost)
+		
+		for i in shop_items_arr:
+			i.queue_free()
+		shop_items_arr = _create_shop(num_shop_items, items)
+	else: print("these aint no broke boy cookies :(")
+	

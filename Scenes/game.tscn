@@ -1,3 +1,71 @@
-[gd_scene format=3 uid="uid://cj0x0mnqcma15"]
+[gd_scene load_steps=8 format=3 uid="uid://cj0x0mnqcma15"]
 
-[node name="game" type="Node2D"]
+[ext_resource type="Script" uid="uid://cnr0m7max3si7" path="res://Scripts/player.gd" id="1_ebmjs"]
+
+[sub_resource type="GDScript" id="GDScript_qxrlw"]
+script/source = "extends CanvasLayer
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	pass
+"
+
+[sub_resource type="Environment" id="Environment_2poj3"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ebmjs"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_qxrlw"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_wrm1d"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3dryh"]
+albedo_color = Color(6.01634e-08, 0, 0.111867, 1)
+
+[node name="RootCanvas" type="CanvasLayer"]
+script = SubResource("GDScript_qxrlw")
+
+[node name="Node3D" type="Node3D" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Node3D"]
+environment = SubResource("Environment_2poj3")
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="Node3D"]
+
+[node name="SubViewport" type="SubViewport" parent="Node3D/SubViewportContainer"]
+size = Vector2i(1152, 648)
+
+[node name="Camera3D" type="Camera3D" parent="Node3D/SubViewportContainer/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 0.964433, 0.264328, 0, -0.264328, 0.964433, 0, 1.48199, 3.57283)
+
+[node name="Player" type="CharacterBody3D" parent="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.6371)
+script = ExtResource("1_ebmjs")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Node3D/Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.63461)
+shape = SubResource("CapsuleShape3D_ebmjs")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D/Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.63461)
+mesh = SubResource("CapsuleMesh_qxrlw")
+
+[node name="FocusMeter" type="ProgressBar" parent="Node3D/Player"]
+offset_left = 478.0
+offset_top = 230.0
+offset_right = 678.0
+offset_bottom = 257.0
+value = 100.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D"]
+transform = Transform3D(50, 0, 0, 0, 50, 0, 0, 0, 50, 0, -1.37889, 0)
+mesh = SubResource("PlaneMesh_wrm1d")
+surface_material_override/0 = SubResource("StandardMaterial3D_3dryh")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 0.488149, 0.87276, 0, -0.87276, 0.488149, 0.00430346, 3.53554, 1.4696)

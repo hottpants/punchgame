@@ -144,7 +144,6 @@ func _process(delta: float) -> void:
 	var cash_label = $Cash
 	cash_label.text = "$" + str(cash)
 	pass
-	
 
 # Called when refresh button is pressed
 

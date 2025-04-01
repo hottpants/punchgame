@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://cj0x0mnqcma15"]
+[gd_scene load_steps=16 format=3 uid="uid://cj0x0mnqcma15"]
 
 [ext_resource type="Script" uid="uid://cnr0m7max3si7" path="res://Scripts/player.gd" id="1_ebmjs"]
 
@@ -22,10 +22,32 @@ func _process(delta: float) -> void:
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_qxrlw"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ebmjs"]
+bg_color = Color(0.211765, 0.0705882, 0.301961, 0.588235)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3dryh"]
+bg_color = Color(0.605, 0.308108, 0.807128, 1)
+
 [sub_resource type="PlaneMesh" id="PlaneMesh_wrm1d"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3dryh"]
 albedo_color = Color(6.01634e-08, 0, 0.111867, 1)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qxrlw"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_wrm1d"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wowpa"]
+albedo_color = Color(0.739789, 1.93726e-06, 9.62615e-07, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qxrlw"]
+bg_color = Color(0.811765, 0.054902, 0.180392, 0.0470588)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wrm1d"]
+bg_color = Color(0.811765, 0.054902, 0.180392, 1)
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_i6g32"]
+viewport_path = NodePath("Enemy/HealthBarViewport")
 
 [node name="RootCanvas" type="CanvasLayer"]
 script = SubResource("GDScript_qxrlw")
@@ -43,7 +65,7 @@ size = Vector2i(1152, 648)
 render_target_update_mode = 4
 
 [node name="Camera3D" type="Camera3D" parent="Node3D/SubViewportContainer/SubViewport"]
-transform = Transform3D(1, 0, 0, 0, 0.964433, 0.264328, 0, -0.264328, 0.964433, 0, 1.48199, 3.57283)
+transform = Transform3D(1, 0, 0, 0, 0.964433, 0.264328, 0, -0.264328, 0.964433, 0, 2, 2.5)
 
 [node name="Player" type="CharacterBody3D" parent="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.6371)
@@ -64,11 +86,15 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -100.0
-offset_top = -104.0
+offset_top = 126.0
 offset_right = 100.0
-offset_bottom = -77.0
+offset_bottom = 153.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_styles/background = SubResource("StyleBoxFlat_ebmjs")
+theme_override_styles/fill = SubResource("StyleBoxFlat_3dryh")
 value = 100.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D"]
@@ -78,3 +104,30 @@ surface_material_override/0 = SubResource("StandardMaterial3D_3dryh")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 0.488149, 0.87276, 0, -0.87276, 0.488149, 0.00430346, 3.53554, 1.4696)
+
+[node name="Enemy" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Enemy"]
+shape = SubResource("CapsuleShape3D_qxrlw")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Enemy"]
+mesh = SubResource("CapsuleMesh_wrm1d")
+surface_material_override/0 = SubResource("StandardMaterial3D_wowpa")
+
+[node name="HealthBarViewport" type="SubViewport" parent="Enemy"]
+size = Vector2i(360, 27)
+
+[node name="EnemyHealthBar" type="ProgressBar" parent="Enemy/HealthBarViewport"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_qxrlw")
+theme_override_styles/fill = SubResource("StyleBoxFlat_wrm1d")
+value = 50.0
+
+[node name="Sprite3D" type="Sprite3D" parent="Enemy"]
+transform = Transform3D(1, 0, 0, 0, 0.910777, 0.412898, 0, -0.412898, 0.910777, 0, 1.37585, 0.702548)
+texture = SubResource("ViewportTexture_i6g32")

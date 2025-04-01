@@ -11,10 +11,12 @@ func _ready() -> void:
 	stam_drain = 2
 	stam_recovery = 0.5
 	stam_CD_min = 25
+	
 	pass
 	
 	
 func _physics_process(delta: float) -> void:
+	
 	
 	# _physics_process is super weird and only constantly runs IF something is happening (I think) which is why when you HOLD the a button
 	# it moves left slowly but when you RELEASE the a button it snaps back. I figured this out by printing when different values were changed

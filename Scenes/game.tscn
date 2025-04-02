@@ -16,6 +16,10 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
+
+
+func _on_timer_timeout() -> void:
+	pass # Replace with function body.
 "
 
 [sub_resource type="Environment" id="Environment_2poj3"]
@@ -99,17 +103,17 @@ theme_override_styles/background = SubResource("StyleBoxFlat_ebmjs")
 theme_override_styles/fill = SubResource("StyleBoxFlat_3dryh")
 value = 100.0
 
-[node name="Ballsheartballs" type="Sprite2D" parent="Node3D/Player"]
+[node name="Heart1" type="Sprite2D" parent="Node3D/Player"]
 position = Vector2(185, 81)
 scale = Vector2(0.191244, 0.191244)
 texture = ExtResource("2_wrm1d")
 
-[node name="Ballsheartballs2" type="Sprite2D" parent="Node3D/Player"]
+[node name="Heart2" type="Sprite2D" parent="Node3D/Player"]
 position = Vector2(273, 51)
 scale = Vector2(0.191244, 0.191244)
 texture = ExtResource("2_wrm1d")
 
-[node name="Ballsheartballs3" type="Sprite2D" parent="Node3D/Player"]
+[node name="Heart3" type="Sprite2D" parent="Node3D/Player"]
 position = Vector2(356, 60)
 scale = Vector2(0.191244, 0.191244)
 texture = ExtResource("2_wrm1d")
@@ -146,6 +150,20 @@ theme_override_styles/background = SubResource("StyleBoxFlat_qxrlw")
 theme_override_styles/fill = SubResource("StyleBoxFlat_wrm1d")
 value = 50.0
 
-[node name="Sprite3D" type="Sprite3D" parent="Node3D/Enemy"]
+[node name="EnemyHealthSprite" type="Sprite3D" parent="Node3D/Enemy"]
 transform = Transform3D(1, 0, 0, 0, 0.910777, 0.412898, 0, -0.412898, 0.910777, 0, 1.37585, 0.702548)
 texture = SubResource("ViewportTexture_i6g32")
+
+[node name="Timer" type="Timer" parent="Node3D/Enemy"]
+wait_time = 5.0
+
+[node name="HealthBarTimer" type="Timer" parent="Node3D/Enemy"]
+wait_time = 0.126
+
+[node name="EPICTIMER" type="Timer" parent="Node3D/Enemy"]
+wait_time = 5.186
+
+[connection signal="timeout" from="Node3D/Enemy/Timer" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="Node3D/Enemy/Timer" to="Node3D/Enemy" method="_on_timer_timeout"]
+[connection signal="timeout" from="Node3D/Enemy/HealthBarTimer" to="Node3D/Enemy" method="_on_health_bar_timer_timeout"]
+[connection signal="timeout" from="Node3D/Enemy/EPICTIMER" to="Node3D/Enemy" method="_on_epictimer_timeout"]

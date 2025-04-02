@@ -1,6 +1,8 @@
-[gd_scene load_steps=16 format=3 uid="uid://cj0x0mnqcma15"]
+[gd_scene load_steps=18 format=3 uid="uid://cj0x0mnqcma15"]
 
 [ext_resource type="Script" uid="uid://cnr0m7max3si7" path="res://Scripts/player.gd" id="1_ebmjs"]
+[ext_resource type="Script" uid="uid://vhcwj8iacvrb" path="res://Scripts/enemy.gd" id="2_qxrlw"]
+[ext_resource type="Texture2D" uid="uid://cviqtj2753jui" path="res://BALLSHEARTBALLS.png" id="2_wrm1d"]
 
 [sub_resource type="GDScript" id="GDScript_qxrlw"]
 script/source = "extends CanvasLayer
@@ -47,7 +49,7 @@ bg_color = Color(0.811765, 0.054902, 0.180392, 0.0470588)
 bg_color = Color(0.811765, 0.054902, 0.180392, 1)
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_i6g32"]
-viewport_path = NodePath("Enemy/HealthBarViewport")
+viewport_path = NodePath("Node3D/Enemy/HealthBarViewport")
 
 [node name="RootCanvas" type="CanvasLayer"]
 script = SubResource("GDScript_qxrlw")
@@ -97,6 +99,21 @@ theme_override_styles/background = SubResource("StyleBoxFlat_ebmjs")
 theme_override_styles/fill = SubResource("StyleBoxFlat_3dryh")
 value = 100.0
 
+[node name="Ballsheartballs" type="Sprite2D" parent="Node3D/Player"]
+position = Vector2(185, 81)
+scale = Vector2(0.191244, 0.191244)
+texture = ExtResource("2_wrm1d")
+
+[node name="Ballsheartballs2" type="Sprite2D" parent="Node3D/Player"]
+position = Vector2(273, 51)
+scale = Vector2(0.191244, 0.191244)
+texture = ExtResource("2_wrm1d")
+
+[node name="Ballsheartballs3" type="Sprite2D" parent="Node3D/Player"]
+position = Vector2(356, 60)
+scale = Vector2(0.191244, 0.191244)
+texture = ExtResource("2_wrm1d")
+
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D"]
 transform = Transform3D(50, 0, 0, 0, 50, 0, 0, 0, 50, 0, -1.37889, 0)
 mesh = SubResource("PlaneMesh_wrm1d")
@@ -105,20 +122,21 @@ surface_material_override/0 = SubResource("StandardMaterial3D_3dryh")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 0.488149, 0.87276, 0, -0.87276, 0.488149, 0.00430346, 3.53554, 1.4696)
 
-[node name="Enemy" type="CharacterBody3D" parent="."]
+[node name="Enemy" type="CharacterBody3D" parent="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+script = ExtResource("2_qxrlw")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Enemy"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Node3D/Enemy"]
 shape = SubResource("CapsuleShape3D_qxrlw")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Enemy"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D/Enemy"]
 mesh = SubResource("CapsuleMesh_wrm1d")
 surface_material_override/0 = SubResource("StandardMaterial3D_wowpa")
 
-[node name="HealthBarViewport" type="SubViewport" parent="Enemy"]
+[node name="HealthBarViewport" type="SubViewport" parent="Node3D/Enemy"]
 size = Vector2i(360, 27)
 
-[node name="EnemyHealthBar" type="ProgressBar" parent="Enemy/HealthBarViewport"]
+[node name="EnemyHealthBar" type="ProgressBar" parent="Node3D/Enemy/HealthBarViewport"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -128,6 +146,6 @@ theme_override_styles/background = SubResource("StyleBoxFlat_qxrlw")
 theme_override_styles/fill = SubResource("StyleBoxFlat_wrm1d")
 value = 50.0
 
-[node name="Sprite3D" type="Sprite3D" parent="Enemy"]
+[node name="Sprite3D" type="Sprite3D" parent="Node3D/Enemy"]
 transform = Transform3D(1, 0, 0, 0, 0.910777, 0.412898, 0, -0.412898, 0.910777, 0, 1.37585, 0.702548)
 texture = SubResource("ViewportTexture_i6g32")

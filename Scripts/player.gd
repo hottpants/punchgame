@@ -2,15 +2,26 @@ extends CharacterBody3D
 
 @export var speed = 14
 
+signal decrease_enemy_health(damage)
+
 var target_velocity = Vector3.ZERO
 var rotate_status = 0
 var stam_drain : float
 var stam_recovery : float
 var stam_CD_min : float
+var light_damage : float
+var heavy_damage : float
+var stam_light_min : float
+var stam_heavy_min : float
+
 func _ready() -> void:
 	stam_drain = 2
 	stam_recovery = 0.5
 	stam_CD_min = 25
+	light_damage = 5
+	heavy_damage = 15
+	stam_light_min = 2
+	stam_heavy_min = 35
 	
 	pass
 	
@@ -61,6 +72,16 @@ func _physics_process(delta: float) -> void:
 			rotate_status = 5
 	
 	
+	if Input.is_action_just_pressed("attack_light") and rotate_status == 0 and $FocusMeter.get_value() > stam_light_min:
+		$FocusMeter.set_value($FocusMeter.get_value() - 10 * stam_light_min)
+		get_parent().get_node("Enemy")._damage_enemy(light_damage)
+		await get_tree().create_timer(0.2).timeout
+	
+	if Input.is_action_just_pressed("attack_heavy") and rotate_status == 0 and $FocusMeter.get_value() > stam_heavy_min:
+		$FocusMeter.set_value($FocusMeter.get_value() - stam_heavy_min)
+		get_parent().get_node("Enemy")._damage_enemy(heavy_damage)
+		
+	
 	
 func _process(delta: float) -> void:
 	
@@ -89,7 +110,9 @@ func _process(delta: float) -> void:
 			#print(str(rotate_status) +":"+ str(rad_to_deg(rotation.x)))
 			rotation.x = lerp_angle(rotation.x, deg_to_rad(0), speed * delta)
 			$FocusMeter.set_value($FocusMeter.get_value() + stam_recovery)
-	
+		_:
+			pass
+			
 	# Check to see if the rotation is back to default. If so, set the rotate_status integer to 0
 	if int(rad_to_deg(rotation.y)) == 0 and int(rad_to_deg(rotation.x)) == 0:
 		rotation.y = 0

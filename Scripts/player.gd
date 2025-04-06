@@ -13,6 +13,7 @@ var light_damage : float
 var heavy_damage : float
 var stam_light_min : float
 var stam_heavy_min : float
+var health : int
 
 func _ready() -> void:
 	stam_drain = 2
@@ -22,6 +23,7 @@ func _ready() -> void:
 	heavy_damage = 15
 	stam_light_min = 2
 	stam_heavy_min = 35
+	health = 3
 	
 	pass
 	
@@ -86,7 +88,15 @@ func _physics_process(delta: float) -> void:
 func _process(delta: float) -> void:
 	
 	# The following comments in the match function are the print statements I used to debug
-	
+	match health:
+		0:
+			$Heart1.self_modulate.a = 0.1
+		1: 
+			$Heart2.self_modulate.a = 0.1
+		2:
+			$Heart3.self_modulate.a = 0.1
+		3:
+			pass
 	match rotate_status:
 		0:
 			$FocusMeter.set_value($FocusMeter.get_value() + stam_recovery)
@@ -117,3 +127,6 @@ func _process(delta: float) -> void:
 	if int(rad_to_deg(rotation.y)) == 0 and int(rad_to_deg(rotation.x)) == 0:
 		rotation.y = 0
 		rotate_status = 0
+
+func _lose_health(amount: int):
+	health -= amount

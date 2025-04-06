@@ -10,7 +10,10 @@ func _ready() -> void:
 func _damage_enemy(damage: float):
 	$HealthBarViewport/EnemyHealthBar.set_value($HealthBarViewport/EnemyHealthBar.get_value() - damage)
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+>>>>>>> Stashed changes
 	
 	health_shake_state = 0
 	$HealthBarTimer.start()

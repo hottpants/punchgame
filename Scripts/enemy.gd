@@ -8,47 +8,19 @@ var count : int
 
 func _ready() -> void:
 	enemy_damage = 10
-	health_shake_state = 0
+	health_shake_state = 3
+
 	count = 0
 	$Timer.start()
-	$HealthBarTimer.start()
+	_shake_healthbar(0)
 	
 func _damage_enemy(damage: float):
 	$HealthBarViewport/EnemyHealthBar.set_value($HealthBarViewport/EnemyHealthBar.get_value() - damage)
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-=======
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-	
-=======
->>>>>>> ea3458e79c55368ba88cc163cbd09b9a71242b06
+
 	health_shake_state = 0
 	$HealthBarTimer.start()
 	
-=======
+
 func _enemy_attack():
 	get_parent().get_node("Player")._lose_health(1)
 	

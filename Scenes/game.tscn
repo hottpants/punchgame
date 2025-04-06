@@ -1,8 +1,9 @@
-[gd_scene load_steps=18 format=3 uid="uid://cj0x0mnqcma15"]
+[gd_scene load_steps=21 format=3 uid="uid://cj0x0mnqcma15"]
 
 [ext_resource type="Script" uid="uid://cnr0m7max3si7" path="res://Scripts/player.gd" id="1_ebmjs"]
 [ext_resource type="Script" uid="uid://vhcwj8iacvrb" path="res://Scripts/enemy.gd" id="2_qxrlw"]
 [ext_resource type="Texture2D" uid="uid://cviqtj2753jui" path="res://BALLSHEARTBALLS.png" id="2_wrm1d"]
+[ext_resource type="Script" uid="uid://bommm48qp1m2d" path="res://Scenes/enemy_health_bar.gd" id="4_3dryh"]
 
 [sub_resource type="GDScript" id="GDScript_qxrlw"]
 script/source = "extends CanvasLayer
@@ -51,6 +52,17 @@ bg_color = Color(0.811765, 0.054902, 0.180392, 0.0470588)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wrm1d"]
 bg_color = Color(0.811765, 0.054902, 0.180392, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wowpa"]
+bg_color = Color(0.15967, 0.15967, 0.15967, 1)
+expand_margin_left = 1.0
+expand_margin_top = 1.0
+expand_margin_right = 1.0
+expand_margin_bottom = 1.0
+shadow_color = Color(0.439216, 0.439216, 0.439216, 1)
+shadow_offset = Vector2(0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i6g32"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_i6g32"]
 viewport_path = NodePath("Node3D/Enemy/HealthBarViewport")
@@ -141,6 +153,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_wowpa")
 size = Vector2i(360, 27)
 
 [node name="EnemyHealthBar" type="ProgressBar" parent="Node3D/Enemy/HealthBarViewport"]
+z_index = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -148,7 +161,24 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_qxrlw")
 theme_override_styles/fill = SubResource("StyleBoxFlat_wrm1d")
-value = 50.0
+value = 100.0
+show_percentage = false
+script = ExtResource("4_3dryh")
+
+[node name="DamageBar" type="ProgressBar" parent="Node3D/Enemy/HealthBarViewport/EnemyHealthBar"]
+z_index = -1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_wowpa")
+theme_override_styles/fill = SubResource("StyleBoxFlat_i6g32")
+value = 80.0
+show_percentage = false
+
+[node name="Timer" type="Timer" parent="Node3D/Enemy/HealthBarViewport/EnemyHealthBar"]
 
 [node name="EnemyHealthSprite" type="Sprite3D" parent="Node3D/Enemy"]
 transform = Transform3D(1, 0, 0, 0, 0.910777, 0.412898, 0, -0.412898, 0.910777, 0, 1.37585, 0.702548)

@@ -158,7 +158,7 @@ texture = SubResource("ViewportTexture_i6g32")
 wait_time = 5.0
 
 [node name="HealthBarTimer" type="Timer" parent="Node3D/Enemy"]
-wait_time = 0.126
+wait_time = 0.025
 
 [node name="EPICTIMER" type="Timer" parent="Node3D/Enemy"]
 wait_time = 5.186

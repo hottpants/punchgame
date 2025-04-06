@@ -15,7 +15,10 @@ func _ready() -> void:
 	
 func _damage_enemy(damage: float):
 	$HealthBarViewport/EnemyHealthBar.set_value($HealthBarViewport/EnemyHealthBar.get_value() - damage)
-
+	health_shake_state = 0
+	$HealthBarTimer.start()
+	
+=======
 func _enemy_attack():
 	get_parent().get_node("Player")._lose_health(1)
 	
@@ -59,6 +62,9 @@ func _on_health_bar_timer_timeout() -> void:
 			health_shake_state = 0
 			print(health_shake_state)
 			$HealthBarTimer.start()
+	if count >= 7:
+		count = 0
+		$HealthBarTimer.stop()
 	if count >= 10:
 		count = 0
 		$EPICTIMER.start()

@@ -2,6 +2,8 @@ extends CharacterBody3D
 
 class_name Enemy
 
+@onready var enemy_health_bar = $enemy_health_bar
+
 var enemy_damage : float
 var health_shake_state : int
 var count : int
@@ -9,6 +11,36 @@ var attack_choice : int
 var enemy_cd_state : int
 var rand_attack_choice : int
 
+@onready var timer = $DamageTimer
+@onready var damage_bar = $DamageBar
+
+var health = 0 : set = _set_health
+
+func _set_health(new_health):
+	var prev_health = health
+	health = min(max_value, new_health)
+	value = health
+	
+	if health <= 0:
+		queue_free()
+		
+		if health < prev_health:
+			timer.start()
+			
+		else:
+			damage_bar.value = health
+
+func init_health(_health):
+		health = _health
+		max_value = health
+		value = health
+		damage_bar.max_value = health
+		damage_bar.value = health
+		
+		
+#func _on_timer_timeout() -> void:
+	#damage_bar.value = health
+	
 func _ready() -> void:
 	$Attack.rotation.x = deg_to_rad(-25)
 	enemy_damage = 10
@@ -110,3 +142,9 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 	if body == $"../Player":
 		print("HIT")
 		get_parent().get_node("Player")._lose_health(1)
+func _on_epictimer_timeout() -> void:
+	$HealthBarTimer.start()
+
+
+func _on_damage_bar_timer_timeout() -> void:
+	pass # Replace with function body.

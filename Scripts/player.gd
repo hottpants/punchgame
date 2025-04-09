@@ -77,12 +77,13 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("attack_light") and rotate_status == 0 and $FocusMeter.get_value() > stam_light_min:
 		$FocusMeter.set_value($FocusMeter.get_value() - 10 * stam_light_min)
 		get_parent().get_node("Enemy")._damage_enemy(light_damage)
-		await get_tree().create_timer(0.2).timeout
 	
 	if Input.is_action_just_pressed("attack_heavy") and rotate_status == 0 and $FocusMeter.get_value() > stam_heavy_min:
 		$FocusMeter.set_value($FocusMeter.get_value() - stam_heavy_min)
 		get_parent().get_node("Enemy")._damage_enemy(heavy_damage)
-		
+	
+	if Input.is_action_just_pressed("change_to_shop"):
+		get_tree().change_scene_to_file("res://Scenes/shop.tscn")
 	
 	
 func _process(delta: float) -> void:

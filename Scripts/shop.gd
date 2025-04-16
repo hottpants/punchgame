@@ -4,7 +4,11 @@ extends Node2D
 @export var num_shop_items = 4
 var items : Array
 var shop_items_arr : Array
+var inventory : Array
 @export var refresh_cost = 5
+@export var inventory_size = 10
+var exclude_items : Array
+var inventory_names : Array
 # Called when the node enters the scene tree for the first time.
 
 func _ready() -> void:
@@ -16,33 +20,50 @@ func _ready() -> void:
 	var brassknuckles_item = {"Name": "Brass Knuckles", "Cost": 25, "Chance": 2, "Description": "For punching things", "id": 2}
 	var jockstrap_item = {"Name": "Jock Strap", "Cost": 6, "Chance": 4, "Description": "You'd look good in it", "id": 3}
 	var bong_item = {"Name": "Bong", "Cost": 42, "Chance": 3, "Description": "Hell yea", "id": 4}
-	var holyhandgrenade_item = {"Name": "Holy Hand Grenade", "Cost": 1000, "Chance": 4, "Description": "Total annihilation", "id": 5}
+	var holyhandgrenade_item = {"Name": "Holy Hand Grenade", "Cost": 1000, "Chance": 4, "Description": "Go away baldy!", "id": 5}
 	var gun_item = {"Name": "Gun", "Cost": 63, "Chance": 3, "Description": "Parry this!", "id": 6}
 	var baseballbat_item = {"Name": "Baseball Bat", "Cost": 17, "Chance": 3, "Description": "Guh!", "id": 7}
 	
 	# Array of dictionaries to keep them all in one spot
 	
 	items = [balls_item, peenor_item, brassknuckles_item, jockstrap_item, bong_item, holyhandgrenade_item, gun_item, baseballbat_item]
-	
 	# Creates an array of all of the items currently in the shop
 	
-	shop_items_arr = _create_shop(num_shop_items, items)
+	shop_items_arr = _create_shop()
+	inventory = []
+	inventory_names = []
+	exclude_items = []
 	$Button.text = "REFRESH $" + str(refresh_cost)
 	
 # Called when the buy button corresponding to an item is clicked. Signal emitted from shop_item.gd
 
-func buy_item(itemName, cost):
-	
+func buy_item(id, shop_id):
+	var item = items[id]
+	var cost = item["Cost"]
 	# Checks if you're a brokey
 	
 	if((cash - cost) >= 0):
 		
+		cash -= cost
+		
+		var new_item = Label.new()
+		new_item.text = item["Name"]
+		$ItemContainer.add_child(new_item)
+		inventory.append(item)
+		inventory_names.append(item["Name"])
+		print("New Shop ID: " + str(shop_id))
+		shop_items_arr[shop_id]._buy_object()
 		# Adds the item to your "inventory"
 		
-		cash -= cost
-		var newItem = Label.new()
-		newItem.text = itemName
-		$ItemContainer.add_child(newItem)
+		num_shop_items = min(num_shop_items, (items.size() - inventory_names.size()))
+		#print("Items array size: " + str(items.size()))
+		#print("Inventory names array size: " + str(inventory_names.size()))
+		#print("Num shop items: " + str(num_shop_items))
+		#for i in inventory_names:
+			#print("Name: " + i)
+		#print(str(abs(items.size() - inventory_names.size())))
+				
+		
 	else:
 		
 		# If you're a brokey, you gotta get your money up
@@ -51,56 +72,27 @@ func buy_item(itemName, cost):
 		
 # Called during the _create_shop function. Stocks a specific item in shop based on its RNG and whether or not it is already in the shop
 
-func _stock_item(chance: Array, shop_items: Array):
-	var itemPicked = false
-	var index
+func _stock_item():
+	var index # The index of the item being returned
+	var picked = false # The boolean which is set to true when an item is picked
 	
-	# Using a counter to determine when all items in shop have been checked in order to prevent duplicates
-	
-	var count = 0
-	
-	# While loop to continue attempting to stock item if one of its type is already in there, or if the roll for RNG fails
-	
-	while itemPicked == false:
+	while !picked: # Continue to roll for an item until one is picked
+		index = randi_range(0,items.size()-1)
+		var item = items[index]
 		
-		# Roll for random item
-		
-		index = randi_range(0,chance.size()-1)
-		
-		# Roll and check for RNG
-		
-		if chance[index]["Chance"] < (randi_range(2,5)):
-			
-			# Iterate through each item and increment counter
-			
-			for i in shop_items:
-				
-				# If item originally rolled matches an item in the shop, do not increment counter
-				
-				if chance[index]["Name"] == i._get_name():
-					pass
-					
-				# If item originally rolled does not match an item in the shop, increment counter
-					
-				else: count += 1
-			
-			# Check to see if number of objects not matching is equal to total objects in shop
-			
-			if count == shop_items.size():
-				itemPicked = true
-				return index
-				
-			# If number of objects not matching is NOT equal to total objects in shop, then item type is already in shop. Reset counter and try again
-				
-			else: count = 0
+		if !exclude_items.has(item["Name"]) and item["Chance"] < (randi_range(2,5)):
+			exclude_items.append(item["Name"])
+			picked = true
+			return(index)
 
 # Called when refreshing shop or creating shop for the first time
 
-func _create_shop(num_shop_items: int, items: Array):
+func _create_shop():
 	
+	exclude_items.clear()
+	exclude_items.append_array(inventory_names)
 	# Create array and then resize it to num_shop_items
 	
-	var shop_items_arr = []
 	shop_items_arr.resize(num_shop_items)
 	
 	# Fill array with empty ShopItems
@@ -116,7 +108,7 @@ func _create_shop(num_shop_items: int, items: Array):
 		
 		# Grab item information using the index of an item from _stock_item
 		
-		var item = items[_stock_item(items, shop_items_arr)]
+		var item = items[_stock_item()]
 		
 		# Create an item from the shop_items_arr
 		
@@ -124,7 +116,8 @@ func _create_shop(num_shop_items: int, items: Array):
 		
 		# Set stats of created item to stats of randomized item
 		
-		new_shop_item._set_stats(item["Name"], item["Cost"], item["Description"])
+		print("Shop id: " + str(i))
+		new_shop_item._set_stats(item["Name"], item["Cost"], item["Description"], item["id"], i)
 		
 		# Connect emitter from shop_item.gd
 		
@@ -137,7 +130,7 @@ func _create_shop(num_shop_items: int, items: Array):
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	
 	# Sets cash equal to how much you have
 	
@@ -158,6 +151,9 @@ func _on_button_pressed() -> void:
 		
 		for i in shop_items_arr:
 			i.queue_free()
-		shop_items_arr = _create_shop(num_shop_items, items)
+		shop_items_arr = _create_shop()
 	else: print("these aint no broke boy cookies :(")
-	
+
+
+func _on_continue_button_pressed() -> void:
+	get_tree().change_scene_to_file("res://Scenes/game.tscn")

@@ -4,8 +4,25 @@ extends CharacterBody3D
 
 var target_velocity = Vector3.ZERO
 
+<<<<<<< Updated upstream
 func _physics_process(delta: float) -> void:
 	var has_stam = true
+=======
+func _ready() -> void:
+	stam_drain = 2
+	stam_recovery = 0.5
+	stam_CD_min = 25
+	light_damage = 5
+	heavy_damage = 15
+	stam_light_min = 2
+	stam_heavy_min = 35
+	health = 3
+	
+	pass
+	
+	
+func _physics_process(_delta: float) -> void:
+>>>>>>> Stashed changes
 	
 	if int(rotation.y) <= 0:
 		if Input.is_action_pressed("dodge_left") and has_stam:

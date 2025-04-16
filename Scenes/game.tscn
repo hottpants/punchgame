@@ -1,3 +1,12 @@
+
+[gd_scene load_steps=8 format=3 uid="uid://cj0x0mnqcma15"]
+
+[ext_resource type="Script" uid="uid://cnr0m7max3si7" path="res://Scripts/player.gd" id="1_ebmjs"]
+[gd_scene load_steps=24 format=3 uid="uid://cj0x0mnqcma15"]
+
+[ext_resource type="Script" uid="uid://cnr0m7max3si7" path="res://Scripts/player.gd" id="1_ebmjs"]
+[ext_resource type="Script" uid="uid://vhcwj8iacvrb" path="res://Scripts/enemy.gd" id="2_qxrlw"]
+[ext_resource type="Texture2D" uid="uid://cviqtj2753jui" path="res://BALLSHEARTBALLS.png" id="2_wrm1d"]
 [gd_scene load_steps=21 format=3 uid="uid://cj0x0mnqcma15"]
 
 [ext_resource type="Script" uid="uid://cnr0m7max3si7" path="res://Scripts/player.gd" id="1_ebmjs"]
@@ -15,7 +24,7 @@ func _ready() -> void:
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	pass
 
 
@@ -74,6 +83,7 @@ transparency = 1
 albedo_color = Color(1, 0.509804, 0.203922, 0.372549)
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_wrm1d"]
+
 
 [node name="RootCanvas" type="CanvasLayer"]
 script = SubResource("GDScript_qxrlw")
@@ -144,6 +154,7 @@ mesh = SubResource("PlaneMesh_wrm1d")
 surface_material_override/0 = SubResource("StandardMaterial3D_3dryh")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 0.488149, 0.87276, 0, -0.87276, 0.488149, 0.00430346, 3.53554, 1.4696)
 transform = Transform3D(1, 0, 0, 0, 0.217445, 0.976073, 0, -0.976073, 0.217445, 0.00430346, 3.84141, -0.499136)
 
 [node name="Enemy" type="CharacterBody3D" parent="Node3D"]
@@ -171,6 +182,7 @@ theme_override_styles/background = SubResource("StyleBoxFlat_qxrlw")
 theme_override_styles/fill = SubResource("StyleBoxFlat_wrm1d")
 value = 100.0
 show_percentage = false
+script = SubResource("GDScript_wrm1d")
 script = ExtResource("4_3dryh")
 
 [node name="DamageBar" type="ProgressBar" parent="Node3D/Enemy/HealthBarViewport/EnemyHealthBar"]
@@ -186,6 +198,8 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_i6g32")
 value = 80.0
 show_percentage = false
 
+[node name="DamageTimer" type="Timer" parent="Node3D/Enemy/HealthBarViewport/EnemyHealthBar"]
+wait_time = 0.5
 [node name="Timer" type="Timer" parent="Node3D/Enemy/HealthBarViewport/EnemyHealthBar"]
 
 [node name="EnemyHealthSprite" type="Sprite3D" parent="Node3D/Enemy"]
@@ -219,6 +233,7 @@ shape = SubResource("SphereShape3D_wrm1d")
 [node name="AttackTiming" type="Label3D" parent="Node3D/Enemy"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.12528, 1.29555)
 
+[connection signal="timeout" from="Node3D/Enemy/HealthBarViewport/EnemyHealthBar/DamageTimer" to="Node3D/Enemy" method="_on_damage_timer_timeout"]
 [connection signal="timeout" from="Node3D/Enemy/Timer" to="." method="_on_timer_timeout"]
 [connection signal="timeout" from="Node3D/Enemy/Timer" to="Node3D/Enemy" method="_on_timer_timeout"]
 [connection signal="timeout" from="Node3D/Enemy/HealthBarTimer" to="Node3D/Enemy" method="_on_health_bar_timer_timeout"]

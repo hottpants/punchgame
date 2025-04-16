@@ -1,14 +1,18 @@
-<<<<<<< Updated upstream
+
 [gd_scene load_steps=8 format=3 uid="uid://cj0x0mnqcma15"]
 
 [ext_resource type="Script" uid="uid://cnr0m7max3si7" path="res://Scripts/player.gd" id="1_ebmjs"]
-=======
 [gd_scene load_steps=24 format=3 uid="uid://cj0x0mnqcma15"]
 
 [ext_resource type="Script" uid="uid://cnr0m7max3si7" path="res://Scripts/player.gd" id="1_ebmjs"]
 [ext_resource type="Script" uid="uid://vhcwj8iacvrb" path="res://Scripts/enemy.gd" id="2_qxrlw"]
 [ext_resource type="Texture2D" uid="uid://cviqtj2753jui" path="res://BALLSHEARTBALLS.png" id="2_wrm1d"]
->>>>>>> Stashed changes
+[gd_scene load_steps=21 format=3 uid="uid://cj0x0mnqcma15"]
+
+[ext_resource type="Script" uid="uid://cnr0m7max3si7" path="res://Scripts/player.gd" id="1_ebmjs"]
+[ext_resource type="Script" uid="uid://vhcwj8iacvrb" path="res://Scripts/enemy.gd" id="2_qxrlw"]
+[ext_resource type="Texture2D" uid="uid://cviqtj2753jui" path="res://BALLSHEARTBALLS.png" id="2_wrm1d"]
+[ext_resource type="Script" uid="uid://bommm48qp1m2d" path="res://Scenes/enemy_health_bar.gd" id="4_3dryh"]
 
 [sub_resource type="GDScript" id="GDScript_qxrlw"]
 script/source = "extends CanvasLayer
@@ -22,6 +26,10 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
 	pass
+
+
+func _on_timer_timeout() -> void:
+	pass # Replace with function body.
 "
 
 [sub_resource type="Environment" id="Environment_2poj3"]
@@ -30,13 +38,17 @@ func _process(_delta: float) -> void:
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_qxrlw"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ebmjs"]
+bg_color = Color(0.211765, 0.0705882, 0.301961, 0.588235)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3dryh"]
+bg_color = Color(0.605, 0.308108, 0.807128, 1)
+
 [sub_resource type="PlaneMesh" id="PlaneMesh_wrm1d"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3dryh"]
 albedo_color = Color(6.01634e-08, 0, 0.111867, 1)
 
-<<<<<<< Updated upstream
-=======
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qxrlw"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_wrm1d"]
@@ -49,8 +61,6 @@ bg_color = Color(0.811765, 0.054902, 0.180392, 0.0470588)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wrm1d"]
 bg_color = Color(0.811765, 0.054902, 0.180392, 1)
-
-[sub_resource type="GDScript" id="GDScript_wrm1d"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wowpa"]
 bg_color = Color(0.15967, 0.15967, 0.15967, 1)
@@ -74,7 +84,7 @@ albedo_color = Color(1, 0.509804, 0.203922, 0.372549)
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_wrm1d"]
 
->>>>>>> Stashed changes
+
 [node name="RootCanvas" type="CanvasLayer"]
 script = SubResource("GDScript_qxrlw")
 
@@ -86,10 +96,12 @@ environment = SubResource("Environment_2poj3")
 [node name="SubViewportContainer" type="SubViewportContainer" parent="Node3D"]
 
 [node name="SubViewport" type="SubViewport" parent="Node3D/SubViewportContainer"]
+handle_input_locally = false
 size = Vector2i(1152, 648)
+render_target_update_mode = 4
 
 [node name="Camera3D" type="Camera3D" parent="Node3D/SubViewportContainer/SubViewport"]
-transform = Transform3D(1, 0, 0, 0, 0.964433, 0.264328, 0, -0.264328, 0.964433, 0, 1.48199, 3.57283)
+transform = Transform3D(1, 0, 0, 0, 0.964433, 0.264328, 0, -0.264328, 0.964433, 0, 2, 2.5)
 
 [node name="Player" type="CharacterBody3D" parent="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.6371)
@@ -104,11 +116,37 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.63461)
 mesh = SubResource("CapsuleMesh_qxrlw")
 
 [node name="FocusMeter" type="ProgressBar" parent="Node3D/Player"]
-offset_left = 478.0
-offset_top = 230.0
-offset_right = 678.0
-offset_bottom = 257.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = 126.0
+offset_right = 100.0
+offset_bottom = 153.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_styles/background = SubResource("StyleBoxFlat_ebmjs")
+theme_override_styles/fill = SubResource("StyleBoxFlat_3dryh")
 value = 100.0
+
+[node name="Heart1" type="Sprite2D" parent="Node3D/Player"]
+position = Vector2(185, 81)
+scale = Vector2(0.191244, 0.191244)
+texture = ExtResource("2_wrm1d")
+
+[node name="Heart2" type="Sprite2D" parent="Node3D/Player"]
+position = Vector2(273, 51)
+scale = Vector2(0.191244, 0.191244)
+texture = ExtResource("2_wrm1d")
+
+[node name="Heart3" type="Sprite2D" parent="Node3D/Player"]
+position = Vector2(356, 60)
+scale = Vector2(0.191244, 0.191244)
+texture = ExtResource("2_wrm1d")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D"]
 transform = Transform3D(50, 0, 0, 0, 50, 0, 0, 0, 50, 0, -1.37889, 0)
@@ -116,9 +154,7 @@ mesh = SubResource("PlaneMesh_wrm1d")
 surface_material_override/0 = SubResource("StandardMaterial3D_3dryh")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Node3D"]
-<<<<<<< Updated upstream
 transform = Transform3D(1, 0, 0, 0, 0.488149, 0.87276, 0, -0.87276, 0.488149, 0.00430346, 3.53554, 1.4696)
-=======
 transform = Transform3D(1, 0, 0, 0, 0.217445, 0.976073, 0, -0.976073, 0.217445, 0.00430346, 3.84141, -0.499136)
 
 [node name="Enemy" type="CharacterBody3D" parent="Node3D"]
@@ -147,6 +183,7 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_wrm1d")
 value = 100.0
 show_percentage = false
 script = SubResource("GDScript_wrm1d")
+script = ExtResource("4_3dryh")
 
 [node name="DamageBar" type="ProgressBar" parent="Node3D/Enemy/HealthBarViewport/EnemyHealthBar"]
 z_index = -1
@@ -163,6 +200,7 @@ show_percentage = false
 
 [node name="DamageTimer" type="Timer" parent="Node3D/Enemy/HealthBarViewport/EnemyHealthBar"]
 wait_time = 0.5
+[node name="Timer" type="Timer" parent="Node3D/Enemy/HealthBarViewport/EnemyHealthBar"]
 
 [node name="EnemyHealthSprite" type="Sprite3D" parent="Node3D/Enemy"]
 transform = Transform3D(1, 0, 0, 0, 0.910777, 0.412898, 0, -0.412898, 0.910777, 0, 1.37585, 0.702548)
@@ -202,4 +240,3 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.12528, 1.29555)
 [connection signal="timeout" from="Node3D/Enemy/EnemyCDTimer" to="Node3D/Enemy" method="_on_enemy_cd_timer_timeout"]
 [connection signal="timeout" from="Node3D/Enemy/EnemyCDTimer" to="Node3D/Enemy" method="_on_epictimer_timeout"]
 [connection signal="body_entered" from="Node3D/Enemy/Attack/Area3D" to="Node3D/Enemy" method="_on_area_3d_body_entered"]
->>>>>>> Stashed changes

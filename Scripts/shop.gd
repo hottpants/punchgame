@@ -137,13 +137,11 @@ func _process(_delta: float) -> void:
 	var cash_label = $Cash
 	cash_label.text = "$" + str(cash)
 	pass
-	
 
 # Called when refresh button is pressed
 
 func _on_button_pressed() -> void:
-	# Reid, I would like you to work with me to make the refresh button increase in cost every time it is clicked
-	if((cash - refresh_cost) >= 0):
+	if cash - refresh_cost >= 0:
 		cash -= refresh_cost
 		
 		refresh_cost += 1

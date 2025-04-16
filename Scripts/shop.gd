@@ -56,23 +56,6 @@ func buy_item(id, shop_id):
 		# Adds the item to your "inventory"
 		
 		num_shop_items = min(num_shop_items, (items.size() - inventory_names.size()))
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-=======
-=======
->>>>>>> Stashed changes
-		#print("Items array size: " + str(items.size()))
-		#print("Inventory names array size: " + str(inventory_names.size()))
-		#print("Num shop items: " + str(num_shop_items))
-		#for i in inventory_names:
-			#print("Name: " + i)
-		#print(str(abs(items.size() - inventory_names.size())))
-				
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-		
 	else:
 		
 		# If you're a brokey, you gotta get your money up

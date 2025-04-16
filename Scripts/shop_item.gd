@@ -34,7 +34,6 @@ func _get_id():
 
 func _buy_object():
 	button.queue_free()
-	#label.set_label_settings().set_font_color(Color("0b7d1a"))
 	label.add_theme_color_override("font_color",Color("1ad633"))
 	
 func _build_object(x: int, y: int):

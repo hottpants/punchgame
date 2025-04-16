@@ -56,14 +56,6 @@ func buy_item(id, shop_id):
 		# Adds the item to your "inventory"
 		
 		num_shop_items = min(num_shop_items, (items.size() - inventory_names.size()))
-		#print("Items array size: " + str(items.size()))
-		#print("Inventory names array size: " + str(inventory_names.size()))
-		#print("Num shop items: " + str(num_shop_items))
-		#for i in inventory_names:
-			#print("Name: " + i)
-		#print(str(abs(items.size() - inventory_names.size())))
-				
-		
 	else:
 		
 		# If you're a brokey, you gotta get your money up
@@ -137,11 +129,13 @@ func _process(_delta: float) -> void:
 	var cash_label = $Cash
 	cash_label.text = "$" + str(cash)
 	pass
+	
 
 # Called when refresh button is pressed
 
 func _on_button_pressed() -> void:
-	if cash - refresh_cost >= 0:
+	# Reid, I would like you to work with me to make the refresh button increase in cost every time it is clicked
+	if((cash - refresh_cost) >= 0):
 		cash -= refresh_cost
 		
 		refresh_cost += 1

@@ -1,13 +1,19 @@
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 [gd_scene load_steps=8 format=3 uid="uid://cj0x0mnqcma15"]
 
 [ext_resource type="Script" uid="uid://cnr0m7max3si7" path="res://Scripts/player.gd" id="1_ebmjs"]
 =======
+=======
+>>>>>>> Stashed changes
 [gd_scene load_steps=24 format=3 uid="uid://cj0x0mnqcma15"]
 
 [ext_resource type="Script" uid="uid://cnr0m7max3si7" path="res://Scripts/player.gd" id="1_ebmjs"]
 [ext_resource type="Script" uid="uid://vhcwj8iacvrb" path="res://Scripts/enemy.gd" id="2_qxrlw"]
 [ext_resource type="Texture2D" uid="uid://cviqtj2753jui" path="res://BALLSHEARTBALLS.png" id="2_wrm1d"]
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
 [sub_resource type="GDScript" id="GDScript_qxrlw"]

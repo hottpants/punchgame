@@ -22,6 +22,9 @@ func _ready() -> void:
 	
 	
 func _physics_process(_delta: float) -> void:
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 	
 	if int(rotation.y) <= 0:

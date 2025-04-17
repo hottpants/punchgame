@@ -9,9 +9,13 @@ var inventory : Array
 @export var inventory_size = 10
 var exclude_items : Array
 var inventory_names : Array
+
+var player
+var inventory_scene
 # Called when the node enters the scene tree for the first time.
 
 func _ready() -> void:
+	player = $"../Player"
 	
 	# Dictionaries right here are used to keep track of what each item does, its cost, and other important info
 	
@@ -28,13 +32,19 @@ func _ready() -> void:
 	
 	items = [balls_item, peenor_item, brassknuckles_item, jockstrap_item, bong_item, holyhandgrenade_item, gun_item, baseballbat_item]
 	# Creates an array of all of the items currently in the shop
+	inventory_scene = load("res://Scenes/Inventory.tscn").instantiate()
+	$ColorRect.add_child(inventory_scene)
+	inventory_scene.set_inventory(player.get_inventory())
 	
-	shop_items_arr = _create_shop()
-	inventory = []
-	inventory_names = []
+	inventory = player.get_inventory()
+	for i in inventory: 
+		print(i["Name"])
+		inventory_names.append(i["Name"])
+	num_shop_items = min(num_shop_items, (items.size() - inventory_names.size()))
 	exclude_items = []
-	$Button.text = "REFRESH $" + str(refresh_cost)
-	
+	shop_items_arr = _create_shop()
+	$ColorRect/Button.text = "REFRESH $" + str(refresh_cost)
+	cash = player.get_cash()
 # Called when the buy button corresponding to an item is clicked. Signal emitted from shop_item.gd
 
 func buy_item(id, shop_id):
@@ -45,17 +55,13 @@ func buy_item(id, shop_id):
 	if((cash - cost) >= 0):
 		
 		cash -= cost
-		
-		var new_item = Label.new()
-		new_item.text = item["Name"]
-		$ItemContainer.add_child(new_item)
+
+		inventory_scene.add_item(item)
 		inventory.append(item)
 		inventory_names.append(item["Name"])
-		print("New Shop ID: " + str(shop_id))
 		shop_items_arr[shop_id]._buy_object()
-		# Adds the item to your "inventory"
+		# Adds the item to your inventory
 		
-		num_shop_items = min(num_shop_items, (items.size() - inventory_names.size()))
 	else:
 		
 		# If you're a brokey, you gotta get your money up
@@ -69,6 +75,8 @@ func _stock_item():
 	var picked = false # The boolean which is set to true when an item is picked
 	
 	while !picked: # Continue to roll for an item until one is picked
+		for i in exclude_items:
+			print("Exluded Item: " + i)
 		index = randi_range(0,items.size()-1)
 		var item = items[index]
 		
@@ -91,7 +99,7 @@ func _create_shop():
 	
 	for i in range(num_shop_items):
 		var new_shop_item = ShopItem.new()
-		$VBoxContainer.add_child(new_shop_item)
+		$ColorRect/VBoxContainer.add_child(new_shop_item)
 		shop_items_arr[i] = new_shop_item
 	
 	# Stock shop with random items
@@ -108,7 +116,6 @@ func _create_shop():
 		
 		# Set stats of created item to stats of randomized item
 		
-		print("Shop id: " + str(i))
 		new_shop_item._set_stats(item["Name"], item["Cost"], item["Description"], item["id"], i)
 		
 		# Connect emitter from shop_item.gd
@@ -126,7 +133,7 @@ func _process(_delta: float) -> void:
 	
 	# Sets cash equal to how much you have
 	
-	var cash_label = $Cash
+	var cash_label = $ColorRect/Cash
 	cash_label.text = "$" + str(cash)
 	pass
 	
@@ -139,7 +146,7 @@ func _on_button_pressed() -> void:
 		cash -= refresh_cost
 		
 		refresh_cost += 1
-		$Button.text = "REFRESH $" + str(refresh_cost)
+		$ColorRect/Button.text = "REFRESH $" + str(refresh_cost)
 		
 		for i in shop_items_arr:
 			i.queue_free()
@@ -148,4 +155,7 @@ func _on_button_pressed() -> void:
 
 
 func _on_continue_button_pressed() -> void:
-	get_tree().change_scene_to_file("res://Scenes/game.tscn")
+	player.set_cash(cash)
+	player.set_inventory(inventory)
+	$"../../".reset()
+	self.queue_free()

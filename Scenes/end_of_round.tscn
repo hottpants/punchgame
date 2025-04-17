@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cga3h3vqb8tjh"]
 
-[ext_resource type="Script" uid="uid://d1pp4kmem33cs" path="res://Scenes/end_of_round.gd" id="1_a6470"]
+[ext_resource type="Script" uid="uid://d1pp4kmem33cs" path="res://Scripts/end_of_round.gd" id="1_a6470"]
 [ext_resource type="Theme" uid="uid://dgd2qhttx8nr5" path="res://Resources/ContButtonTheme.tres" id="1_jasp5"]
 
 [node name="WinPopUp" type="Control"]

@@ -10,7 +10,11 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	pass
 
-
+func on_win(payout : int, stage : int):
+	$Background/PayoutLabel.text = ("Payout:                   $" + str(payout * stage))
+	$"../Player".pay(payout*stage)
+	
 func _on_button_pressed() -> void:
 	$"../Player"._increment_stage()
-	get_tree().change_scene_to_file("res://Scenes/shop.tscn")
+	self.queue_free()
+	

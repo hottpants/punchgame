@@ -12,7 +12,13 @@ var stam_CD_min : float
 var stam_light_min : float
 var stam_heavy_min : float
 var health : int
-var stage = 1
+var stage := 1
+@onready var shop_scene = load("res://Scenes/shop.tscn")
+var new_shops
+var cash := 0
+
+var player_inventory : Array
+var inventory_size := 6
 
 func _ready() -> void:
 	stam_drain = 2
@@ -27,11 +33,29 @@ func _ready() -> void:
 	pass
 	
 func _increment_stage():
+	var new_shop = shop_scene.instantiate()
+	$"../".add_child(new_shop)
+	#new_shop.set_position(Vector2(100,100))
 	stage += 1
+
+func set_inventory(new_inventory : Array):
+	player_inventory = new_inventory
+
+func get_inventory():
+	return(player_inventory)
 
 func _get_stage():
 	return stage
-	
+
+func pay(amount : int):
+	cash += amount
+
+func set_cash(amount : int):
+	cash = amount
+
+func get_cash():
+	return cash
+
 func _physics_process(delta: float) -> void:
 	
 	
@@ -87,8 +111,10 @@ func _physics_process(delta: float) -> void:
 		get_parent().get_node("Enemy")._damage_enemy(heavy_damage)
 	
 	if Input.is_action_just_pressed("change_to_shop"):
-		print("Balls")
-		get_tree().change_scene_to_file("res://Scenes/shop.tscn")
+		var new_shop = shop_scene.instantiate()
+		$"../".add_child(new_shop)
+		
+		#get_tree().change_scene_to_file("res://Scenes/shop.tscn")
 	
 	
 func _process(delta: float) -> void:

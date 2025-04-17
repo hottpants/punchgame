@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3 uid="uid://gfljrcyrrse1"]
+
+[ext_resource type="Script" uid="uid://cpeylai5yhmxb" path="res://Scripts/damage.gd" id="1_2odoc"]
+[ext_resource type="Theme" uid="uid://bv7yr8qtsw6sv" path="res://Resources/DamageTextColor.tres" id="1_g8cbs"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_g8cbs"]
+viewport_path = NodePath("SubViewport")
+
+[node name="DamageSprite" type="Sprite3D"]
+texture = SubResource("ViewportTexture_g8cbs")
+script = ExtResource("1_2odoc")
+
+[node name="SubViewport" type="SubViewport" parent="."]
+size = Vector2i(40, 30)
+
+[node name="DamageLabel" type="Label" parent="SubViewport"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_g8cbs")
+text = "5"
+
+[node name="Timer" type="Timer" parent="."]
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

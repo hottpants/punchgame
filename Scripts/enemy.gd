@@ -15,6 +15,7 @@ var health
 
 @onready var pop_up_scene = load("res://Scenes/end_of_round.tscn")
 @onready var enemy_health_bar
+@onready var damage_scene
 
 func die():
 	alive = false
@@ -61,6 +62,10 @@ func _damage_enemy(damage: float):
 		health = enemy_health_bar.health
 		enemy_health_bar._set_health(health - damage)
 		health_shake_state = 0
+		damage_scene = load("res://Scenes/damage.tscn").instantiate()
+		$"../".add_child(damage_scene)
+		damage_scene.set_damage(damage)
+		
 		$HealthBarTimer.start()
 	
 

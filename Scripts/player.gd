@@ -7,7 +7,6 @@ var rotate_status = 0
 var stam_drain : float
 var stam_recovery : float
 var stam_CD_min : float
-
 @export var light_damage : float
 @export var heavy_damage : float
 var stam_light_min : float

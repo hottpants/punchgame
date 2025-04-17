@@ -27,19 +27,18 @@ func _ready() -> void:
 	var holyhandgrenade_item = {"Name": "Holy Hand Grenade", "Cost": 1000, "Chance": 4, "Description": "Go away baldy!", "id": 5}
 	var gun_item = {"Name": "Gun", "Cost": 63, "Chance": 3, "Description": "Parry this!", "id": 6}
 	var baseballbat_item = {"Name": "Baseball Bat", "Cost": 17, "Chance": 3, "Description": "Guh!", "id": 7}
+	var tophat_item = {"Name": "Top Hat", "Cost": 60, "Chance": 3, "Description": "For capitalist pigs", "id": 8}
 	
 	# Array of dictionaries to keep them all in one spot
 	
-	items = [balls_item, peenor_item, brassknuckles_item, jockstrap_item, bong_item, holyhandgrenade_item, gun_item, baseballbat_item]
+	items = [balls_item, peenor_item, brassknuckles_item, jockstrap_item, bong_item, holyhandgrenade_item, gun_item, baseballbat_item, tophat_item]
 	# Creates an array of all of the items currently in the shop
 	inventory_scene = load("res://Scenes/Inventory.tscn").instantiate()
 	$ColorRect.add_child(inventory_scene)
 	inventory_scene.set_inventory(player.get_inventory())
 	
 	inventory = player.get_inventory()
-	for i in inventory: 
-		print(i["Name"])
-		inventory_names.append(i["Name"])
+	for i in inventory: inventory_names.append(i["Name"])
 	num_shop_items = min(num_shop_items, (items.size() - inventory_names.size()))
 	exclude_items = []
 	shop_items_arr = _create_shop()
@@ -55,11 +54,11 @@ func buy_item(id, shop_id):
 	if((cash - cost) >= 0):
 		
 		cash -= cost
-
 		inventory_scene.add_item(item)
 		inventory.append(item)
 		inventory_names.append(item["Name"])
 		shop_items_arr[shop_id]._buy_object()
+		num_shop_items = min(num_shop_items, (items.size() - inventory_names.size()))
 		# Adds the item to your inventory
 		
 	else:
@@ -75,8 +74,6 @@ func _stock_item():
 	var picked = false # The boolean which is set to true when an item is picked
 	
 	while !picked: # Continue to roll for an item until one is picked
-		for i in exclude_items:
-			print("Exluded Item: " + i)
 		index = randi_range(0,items.size()-1)
 		var item = items[index]
 		

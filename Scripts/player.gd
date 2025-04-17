@@ -18,6 +18,12 @@ var stage := 1
 var new_shops
 var cash := 0
 
+var light_multiplier := 1.0
+var heavy_multiplier := 1.0
+var dodge_chance := 0.0
+var heal_on_punch_chance := 0.0
+var fp_drain_reduction := 1.0
+
 var player_inventory : Array
 var inventory_size := 6
 
@@ -25,19 +31,56 @@ func _ready() -> void:
 	stam_drain = 2
 	stam_recovery = 0.5
 	stam_CD_min = 25
-	#light_damage = 5
-	#heavy_damage = 15
+	light_damage = 5
+	heavy_damage = 15
 	stam_light_min = 2
 	stam_heavy_min = 35
 	health = 3
 	
 	pass
-	
+
+func reset():
+	check_items()
+
 func _increment_stage():
 	var new_shop = shop_scene.instantiate()
 	$"../".add_child(new_shop)
 	#new_shop.set_position(Vector2(100,100))
 	stage += 1
+
+func check_items():
+	light_multiplier = 1
+	heavy_multiplier = 1
+	dodge_chance = 0.0
+	heal_on_punch_chance = 0.0
+	fp_drain_reduction = 1.0
+	
+	for item in player_inventory:
+		match item["id"]:
+			0:
+				dodge_chance += 0.05
+			1:
+				heal_on_punch_chance += 0.05
+			2:
+				light_multiplier += 0.25
+				heavy_multiplier += 0.25
+			3:
+				fp_drain_reduction -= 0.15
+			4:
+				pass
+			5:
+				heavy_multiplier += 4
+				light_multiplier += 4
+			6:
+				heavy_multiplier += 2
+			7:
+				pass
+			8:
+				light_multiplier += float(cash)/100
+				heavy_multiplier += float(cash)/100
+			_:
+				return
+				
 
 func set_inventory(new_inventory : Array):
 	player_inventory = new_inventory
@@ -104,12 +147,16 @@ func _physics_process(delta: float) -> void:
 	
 	
 	if Input.is_action_just_pressed("attack_light") and rotate_status == 0 and $FocusMeter.get_value() > stam_light_min:
-		$FocusMeter.set_value($FocusMeter.get_value() - 10 * stam_light_min)
-		get_parent().get_node("Enemy")._damage_enemy(light_damage)
+		$FocusMeter.set_value($FocusMeter.get_value() - 10 * stam_light_min * fp_drain_reduction)
+		get_parent().get_node("Enemy")._damage_enemy(light_damage * light_multiplier)
+		var rand = randf_range(0.0, 1.0)
+		if heal_on_punch_chance > rand and health != 3:
+			health += 1
+			print("HEALED!")
 	
 	if Input.is_action_just_pressed("attack_heavy") and rotate_status == 0 and $FocusMeter.get_value() > stam_heavy_min:
-		$FocusMeter.set_value($FocusMeter.get_value() - stam_heavy_min)
-		get_parent().get_node("Enemy")._damage_enemy(heavy_damage)
+		$FocusMeter.set_value($FocusMeter.get_value() - stam_heavy_min * fp_drain_reduction)
+		get_parent().get_node("Enemy")._damage_enemy(heavy_damage * heavy_multiplier)
 	
 	if Input.is_action_just_pressed("change_to_shop"):
 		var new_shop = shop_scene.instantiate()
@@ -125,18 +172,24 @@ func _process(delta: float) -> void:
 		0:
 			$Heart1.self_modulate.a = 0.1
 		1: 
+			$Heart1.self_modulate.a = 1.0
 			$Heart2.self_modulate.a = 0.1
 		2:
+			$Heart1.self_modulate.a = 1.0
+			$Heart2.self_modulate.a = 1.0
 			$Heart3.self_modulate.a = 0.1
 		3:
-			pass
+			$Heart1.self_modulate.a = 1.0
+			$Heart2.self_modulate.a = 1.0
+			$Heart3.self_modulate.a = 1.0
+			
 	match rotate_status:
 		0:
 			$FocusMeter.set_value($FocusMeter.get_value() + stam_recovery)
 		1:
 			#print(str(rotate_status) +":"+ str(rad_to_deg(rotation.y)))
 			rotation.y = lerp_angle(rotation.y, deg_to_rad(-30), speed * delta)
-			$FocusMeter.set_value($FocusMeter.get_value() - stam_drain)
+			$FocusMeter.set_value($FocusMeter.get_value() - stam_drain * fp_drain_reduction)
 		2:
 			#print(str(rotate_status) +":"+ str(rad_to_deg(rotation.y)))
 			rotation.y = lerp_angle(rotation.y, deg_to_rad(0), speed * delta)
@@ -144,11 +197,11 @@ func _process(delta: float) -> void:
 		3:
 			#print(str(rotate_status) +":"+ str(rad_to_deg(rotation.y)))
 			rotation.y = lerp_angle(rotation.y, deg_to_rad(30), speed * delta)
-			$FocusMeter.set_value($FocusMeter.get_value() - stam_drain) 
+			$FocusMeter.set_value($FocusMeter.get_value() - stam_drain * fp_drain_reduction) 
 		4:
 			#print(str(rotate_status) +":"+ str(rad_to_deg(rotation.y)))
 			rotation.x = lerp_angle(rotation.x, deg_to_rad(15), speed * delta)
-			$FocusMeter.set_value($FocusMeter.get_value() - stam_drain) 
+			$FocusMeter.set_value($FocusMeter.get_value() - stam_drain * fp_drain_reduction) 
 		5:
 			#print(str(rotate_status) +":"+ str(rad_to_deg(rotation.x)))
 			rotation.x = lerp_angle(rotation.x, deg_to_rad(0), speed * delta)
@@ -162,4 +215,9 @@ func _process(delta: float) -> void:
 		rotate_status = 0
 
 func _lose_health(amount: int):
-	health -= amount
+	var rand = randf_range(0.0, 1.0)
+	if dodge_chance > rand:
+		print("DODGED!")
+	else:
+		health -= amount
+		

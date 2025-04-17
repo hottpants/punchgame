@@ -10,9 +10,8 @@ func _set_stage(new_stage : int):
 	stage = new_stage
 
 func reset():
-	print("MASSIVE PEENOR!")
 	$Node3D/Enemy.reset()
-	#$Node3D/Player.reset()
+	$Node3D/Player.reset()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

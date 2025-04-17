@@ -7,24 +7,30 @@ var rotate_status = 0
 var stam_drain : float
 var stam_recovery : float
 var stam_CD_min : float
-var light_damage : float
-var heavy_damage : float
+@export var light_damage : float
+@export var heavy_damage : float
 var stam_light_min : float
 var stam_heavy_min : float
 var health : int
+var stage = 1
 
 func _ready() -> void:
 	stam_drain = 2
 	stam_recovery = 0.5
 	stam_CD_min = 25
-	light_damage = 5
-	heavy_damage = 15
+	#light_damage = 5
+	#heavy_damage = 15
 	stam_light_min = 2
 	stam_heavy_min = 35
 	health = 3
 	
 	pass
 	
+func _increment_stage():
+	stage += 1
+
+func _get_stage():
+	return stage
 	
 func _physics_process(delta: float) -> void:
 	

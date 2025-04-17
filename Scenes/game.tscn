@@ -61,7 +61,7 @@ transform = Transform3D(1, 0, 0, 0, 0.964433, 0.264328, 0, -0.264328, 0.964433, 
 [node name="Player" type="CharacterBody3D" parent="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.6371)
 script = ExtResource("1_ebmjs")
-light_damage = 100.0
+light_damage = 5.0
 heavy_damage = 15.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Node3D/Player"]

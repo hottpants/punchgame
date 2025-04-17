@@ -1,10 +1,25 @@
-[gd_scene load_steps=19 format=3 uid="uid://cj0x0mnqcma15"]
+[gd_scene load_steps=22 format=3 uid="uid://cj0x0mnqcma15"]
 
-
-[ext_resource type="Script" uid="uid://cbtryixh2ibn0" path="res://Scripts/game.gd" id="1_3dryh"]
 [ext_resource type="Script" uid="uid://cnr0m7max3si7" path="res://Scripts/player.gd" id="1_ebmjs"]
 [ext_resource type="Script" uid="uid://bcqcqi8busjy2" path="res://Scripts/enemy.gd" id="2_qxrlw"]
-[ext_resource type="Texture2D" uid="uid://bcef2863o6tqx" path="res://Scripts/BALLSHEARTBALLS.png" id="2_wrm1d"]
+
+[sub_resource type="GDScript" id="GDScript_qxrlw"]
+script/source = "extends CanvasLayer
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	pass
+
+
+func _on_timer_timeout() -> void:
+	pass # Replace with function body.
+"
 
 [sub_resource type="Environment" id="Environment_2poj3"]
 
@@ -30,6 +45,23 @@ albedo_color = Color(6.01634e-08, 0, 0.111867, 1)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wowpa"]
 albedo_color = Color(0.739789, 1.93726e-06, 9.62615e-07, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qxrlw"]
+bg_color = Color(0.811765, 0.054902, 0.180392, 0.0470588)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wrm1d"]
+bg_color = Color(0.811765, 0.054902, 0.180392, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wowpa"]
+bg_color = Color(0.15967, 0.15967, 0.15967, 1)
+expand_margin_left = 1.0
+expand_margin_top = 1.0
+expand_margin_right = 1.0
+expand_margin_bottom = 1.0
+shadow_color = Color(0.439216, 0.439216, 0.439216, 1)
+shadow_offset = Vector2(0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i6g32"]
+
 [sub_resource type="ViewportTexture" id="ViewportTexture_i6g32"]
 viewport_path = NodePath("Node3D/Enemy/HealthBarViewport")
 
@@ -42,7 +74,7 @@ albedo_color = Color(1, 0.509804, 0.203922, 0.372549)
 [sub_resource type="SphereShape3D" id="SphereShape3D_wrm1d"]
 
 [node name="RootCanvas" type="CanvasLayer"]
-script = ExtResource("1_3dryh")
+script = SubResource("GDScript_qxrlw")
 
 [node name="Node3D" type="Node3D" parent="."]
 
@@ -62,8 +94,6 @@ transform = Transform3D(1, 0, 0, 0, 0.964433, 0.264328, 0, -0.264328, 0.964433, 
 [node name="Player" type="CharacterBody3D" parent="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.6371)
 script = ExtResource("1_ebmjs")
-light_damage = 100.0
-heavy_damage = 15.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Node3D/Player"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.63461)
@@ -92,19 +122,16 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_3dryh")
 value = 100.0
 
 [node name="Heart1" type="Sprite2D" parent="Node3D/Player"]
-position = Vector2(299, 118)
-scale = Vector2(0.142857, 0.142857)
-texture = ExtResource("2_wrm1d")
+position = Vector2(185, 81)
+scale = Vector2(0.191244, 0.191244)
 
 [node name="Heart2" type="Sprite2D" parent="Node3D/Player"]
-position = Vector2(372, 105)
-scale = Vector2(0.142857, 0.142857)
-texture = ExtResource("2_wrm1d")
+position = Vector2(273, 51)
+scale = Vector2(0.191244, 0.191244)
 
 [node name="Heart3" type="Sprite2D" parent="Node3D/Player"]
-position = Vector2(449, 118)
-scale = Vector2(0.142857, 0.142857)
-texture = ExtResource("2_wrm1d")
+position = Vector2(356, 60)
+scale = Vector2(0.191244, 0.191244)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D"]
 transform = Transform3D(50, 0, 0, 0, 50, 0, 0, 0, 50, 0, -1.37889, 0)
@@ -124,6 +151,36 @@ shape = SubResource("CapsuleShape3D_qxrlw")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D/Enemy"]
 mesh = SubResource("CapsuleMesh_wrm1d")
 surface_material_override/0 = SubResource("StandardMaterial3D_wowpa")
+
+[node name="HealthBarViewport" type="SubViewport" parent="Node3D/Enemy"]
+size = Vector2i(360, 27)
+
+[node name="EnemyHealthBar" type="ProgressBar" parent="Node3D/Enemy/HealthBarViewport"]
+z_index = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_qxrlw")
+theme_override_styles/fill = SubResource("StyleBoxFlat_wrm1d")
+value = 100.0
+show_percentage = false
+
+[node name="DamageBar" type="ProgressBar" parent="Node3D/Enemy/HealthBarViewport/EnemyHealthBar"]
+z_index = -1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_wowpa")
+theme_override_styles/fill = SubResource("StyleBoxFlat_i6g32")
+value = 80.0
+show_percentage = false
+
+[node name="Timer" type="Timer" parent="Node3D/Enemy/HealthBarViewport/EnemyHealthBar"]
 
 [node name="EnemyHealthSprite" type="Sprite3D" parent="Node3D/Enemy"]
 transform = Transform3D(1, 0, 0, 0, 0.910777, 0.412898, 0, -0.412898, 0.910777, 0, 1.37585, 0.702548)
@@ -156,16 +213,9 @@ shape = SubResource("SphereShape3D_wrm1d")
 [node name="AttackTiming" type="Label3D" parent="Node3D/Enemy"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.12528, 1.29555)
 
-[node name="DamageTimer" type="Timer" parent="Node3D/Enemy"]
-wait_time = 0.5
-
-[node name="HealthBarViewport" type="SubViewport" parent="Node3D/Enemy"]
-size = Vector2i(360, 20)
-
 [connection signal="timeout" from="Node3D/Enemy/Timer" to="." method="_on_timer_timeout"]
 [connection signal="timeout" from="Node3D/Enemy/Timer" to="Node3D/Enemy" method="_on_timer_timeout"]
 [connection signal="timeout" from="Node3D/Enemy/HealthBarTimer" to="Node3D/Enemy" method="_on_health_bar_timer_timeout"]
 [connection signal="timeout" from="Node3D/Enemy/EnemyCDTimer" to="Node3D/Enemy" method="_on_enemy_cd_timer_timeout"]
 [connection signal="timeout" from="Node3D/Enemy/EnemyCDTimer" to="Node3D/Enemy" method="_on_epictimer_timeout"]
 [connection signal="body_entered" from="Node3D/Enemy/Attack/Area3D" to="Node3D/Enemy" method="_on_area_3d_body_entered"]
-[connection signal="timeout" from="Node3D/Enemy/DamageTimer" to="Node3D/Enemy" method="_on_damage_timer_timeout"]

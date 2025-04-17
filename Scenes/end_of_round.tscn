@@ -1,0 +1,72 @@
+[gd_scene load_steps=3 format=3 uid="uid://cga3h3vqb8tjh"]
+
+[ext_resource type="Script" uid="uid://d1pp4kmem33cs" path="res://Scripts/end_of_round.gd" id="1_a6470"]
+[ext_resource type="Theme" uid="uid://dgd2qhttx8nr5" path="res://Resources/ContButtonTheme.tres" id="1_jasp5"]
+
+[node name="WinPopUp" type="Control"]
+layout_mode = 3
+anchor_right = 0.347
+anchor_bottom = 0.309
+offset_right = 0.255981
+offset_bottom = -0.23201
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_a6470")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -125.0
+offset_top = -100.0
+offset_right = 125.0
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.54902, 0.54902, 0.54902, 0.654902)
+
+[node name="WinLabel" type="Label" parent="Background"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "NUTSACK!"
+horizontal_alignment = 1
+
+[node name="Button" type="Button" parent="Background"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -50.0
+offset_top = -35.0
+offset_right = 50.0
+offset_bottom = -15.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("1_jasp5")
+text = "Continue!"
+
+[node name="PayoutLabel" type="Label" parent="Background"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Payout:                   $20"
+
+[connection signal="pressed" from="Background/Button" to="." method="_on_button_pressed"]

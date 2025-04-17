@@ -1,5 +1,6 @@
 [gd_scene load_steps=19 format=3 uid="uid://cj0x0mnqcma15"]
 
+
 [ext_resource type="Script" uid="uid://cbtryixh2ibn0" path="res://Scripts/game.gd" id="1_3dryh"]
 [ext_resource type="Script" uid="uid://cnr0m7max3si7" path="res://Scripts/player.gd" id="1_ebmjs"]
 [ext_resource type="Script" uid="uid://bcqcqi8busjy2" path="res://Scripts/enemy.gd" id="2_qxrlw"]

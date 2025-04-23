@@ -4,8 +4,8 @@
 4. ~~Rounds~~
 5. ~~Money making (multiplier)~~
 6. ~~Inventory~~
-7. ~~Gameplay loop completed~~
-~~END OF FIRST PROTOTYPE~~
+7. ~~Gameplay loop completed~~ <br>
+<b>~~END OF FIRST PROTOTYPE~~</b>
 8. Selling items
 9. Inventory size
 10. Categorizing rounds

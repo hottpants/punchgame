@@ -1,18 +1,29 @@
 extends Node2D
 
-@export var cash : int
-@export var num_shop_items = 4
-var items : Array
-var shop_items_arr : Array
+## INVENTORY VARS
+
 var inventory : Array
-@export var refresh_cost = 5
-@export var inventory_size = 10
-var exclude_items : Array
+var inventory_size = 10
 var inventory_names : Array
 
+## SHOP VARS
+
+var items : Array
+var shop_items_arr : Array
+var num_shop_items = 4
+var refresh_cost = 5
+var exclude_items : Array
+
+## PLAYER VARS
+
 var player
-var inventory_scene
-# Called when the node enters the scene tree for the first time.
+@export var cash : int
+
+## SCENE VARS
+
+@onready var item_scene = load("res://Scenes/Item.tscn")
+var inventory_manager
+
 
 func _ready() -> void:
 	player = $"../Player"
@@ -32,78 +43,162 @@ func _ready() -> void:
 	# Array of dictionaries to keep them all in one spot
 	
 	items = [balls_item, peenor_item, brassknuckles_item, jockstrap_item, bong_item, holyhandgrenade_item, gun_item, baseballbat_item, tophat_item]
-	# Creates an array of all of the items currently in the shop
-	inventory_scene = load("res://Scenes/Inventory.tscn").instantiate()
-	$ColorRect.add_child(inventory_scene)
-	inventory_scene.set_inventory(player.get_inventory())
+	
+	# Creates an instance of inventory.tscn
+	
+	inventory_manager = load("res://Scenes/Inventory.tscn").instantiate()
+	
+	# Add inventory_manager to the node tree as a child of Shop/ColorRect
+	
+	$ColorRect.add_child(inventory_manager)
+	
+	# Set the inventory of inventory_manager to the player's inventory
+	
+	inventory_manager.set_inventory(player.get_inventory())
+	
+	# Set shop inventory to player inventory
 	
 	inventory = player.get_inventory()
-	for i in inventory: inventory_names.append(i["Name"])
-	num_shop_items = min(num_shop_items, (items.size() - inventory_names.size()))
-	exclude_items = []
-	shop_items_arr = _create_shop()
-	$ColorRect/Button.text = "REFRESH $" + str(refresh_cost)
-	cash = player.get_cash()
-# Called when the buy button corresponding to an item is clicked. Signal emitted from shop_item.gd
-
-func buy_item(id, shop_id):
-	var item = items[id]
-	var cost = item["Cost"]
-	# Checks if you're a brokey
 	
-	if((cash - cost) >= 0):
+	# Add all inventory item names to inventory_names array
+	
+	for i in inventory: inventory_names.append(i["Name"])
+	
+	# Set number of shop items equal to the smaller number between the current number of shop items and the items remaining in the item pool
+	
+	num_shop_items = min(num_shop_items, (items.size() - inventory_names.size()))
+	
+	# Create a new shop and set shop_items_arr equal to the items created
+	
+	shop_items_arr = create_shop()
+	
+	# Set refresh button text to current cost of refresh
+	
+	$ColorRect/Button.text = "REFRESH $" + str(refresh_cost)
+	
+	# Set current cash shown in shop equal to cash stored in player
+	
+	cash = player.get_cash()
+	
+	# Sets cash label text equal to the cash the player has
+	
+	$ColorRect/Cash.text = "$" + str(cash)
+
+# Called when the buy button corresponding to an item is clicked. Signal emitted from shop_item.gd
+func buy_item(id, shop_id):
+	
+	# Sets item to the item in items using the index of id
+	
+	var item = items[id]
+	
+	# Sets cost equal to the item's cost
+	
+	var cost = item["Cost"]
+	
+	if (cash - cost) >= 0: # Checks if you're a brokey
+		
+		# Removes the cost of the item the player attempts to buy from their total cash
 		
 		cash -= cost
-		inventory_scene.add_item(item)
+		
+		# Sets cash label text equal to the cash the player has
+		
+		$ColorRect/Cash.text = "$" + str(cash)
+		
+		# Adds item to inventory.gd
+		
+		inventory_manager.add_item(item)
+		
+		# Adds item to inventory
+		
 		inventory.append(item)
+		
+		# Adds item name to inventory_names
+		
 		inventory_names.append(item["Name"])
-		shop_items_arr[shop_id]._buy_object()
+		
+		# Mark item as bought buy calling the _buy_object() function
+		
+		shop_items_arr[shop_id].buy_item()
+		
+		# Set number of shop items equal to the smaller number between the current number of shop items and the items remaining in the item pool
+		
 		num_shop_items = min(num_shop_items, (items.size() - inventory_names.size()))
-		# Adds the item to your inventory
 		
 	else:
 		
 		# If you're a brokey, you gotta get your money up
 		
 		print("Get your money up, not your funny up!")
-		
-# Called during the _create_shop function. Stocks a specific item in shop based on its RNG and whether or not it is already in the shop
 
+# Called during the create_shop function. Stocks a specific item in shop based on its RNG and whether or not it is already in the shop or inventory
 func _stock_item():
 	var index # The index of the item being returned
 	var picked = false # The boolean which is set to true when an item is picked
 	
 	while !picked: # Continue to roll for an item until one is picked
+		
+		# Roll for random item
+		
 		index = randi_range(0,items.size()-1)
+		
+		# Set item equal to the index of the item rolled
+		
 		var item = items[index]
 		
+		# If the item rolled doesn't already exists in exclude_items AND the item's chance is successfully rolled, put it in the shop
+		
 		if !exclude_items.has(item["Name"]) and item["Chance"] < (randi_range(2,5)):
+			
+			# Add the item that was successfully rolled into the exclude_items list to make sure it does not get added to the shop again
+			
 			exclude_items.append(item["Name"])
+			
+			# Mark picked as true and return the index of the item rolled
+			
 			picked = true
 			return(index)
 
 # Called when refreshing shop or creating shop for the first time
-
-func _create_shop():
+func create_shop():
+	
+	# Sets cash label text equal to the cash the player has
+	
+	$ColorRect/Cash.text = "$" + str(cash)
+	
+	# Clears the list of excluded items since if a new shop is being rolled, new items would also need to be rolled
 	
 	exclude_items.clear()
+	
+	# Add the array of inventory items to the array of excluded items so that items in the inventory cannot be rolled in the shop
+	
 	exclude_items.append_array(inventory_names)
-	# Create array and then resize it to num_shop_items
+	
+	# Resize the shop_items_arr to num_shop_items
 	
 	shop_items_arr.resize(num_shop_items)
 	
-	# Fill array with empty ShopItems
+	# Fills array with empty ShopItems
 	
 	for i in range(num_shop_items):
-		var new_shop_item = ShopItem.new()
+		
+		# Creates instance of Item.tscn
+		
+		var new_shop_item = item_scene.instantiate()
+		
+		# Adds new_shop_item to node tree as a child of Shop/ColorRect/VBoxContainer
+		
 		$ColorRect/VBoxContainer.add_child(new_shop_item)
+		
+		# Adds new_shop_item to shop_items_arr
+		
 		shop_items_arr[i] = new_shop_item
 	
 	# Stock shop with random items
 	
 	for i in range(num_shop_items):
 		
-		# Grab item information using the index of an item from _stock_item
+		# Grab item information using the index of an item from _stock_item in the array items
 		
 		var item = items[_stock_item()]
 		
@@ -117,42 +212,61 @@ func _create_shop():
 		
 		# Connect emitter from shop_item.gd
 		
-		new_shop_item.connect("decreaseMoney", buy_item)
+		new_shop_item.connect("decrease_money", buy_item)
 		
-		# Build all nodes (label, button, etc.)
+		# Build items
 		
-		new_shop_item._build_object(100, (i*50))
+		new_shop_item.build_item(i*50)
 	return(shop_items_arr)
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-
 func _process(_delta: float) -> void:
-	
-	# Sets cash equal to how much you have
-	
-	var cash_label = $ColorRect/Cash
-	cash_label.text = "$" + str(cash)
 	pass
-	
 
 # Called when refresh button is pressed
-
 func _on_button_pressed() -> void:
-	# Reid, I would like you to work with me to make the refresh button increase in cost every time it is clicked
-	if((cash - refresh_cost) >= 0):
+	
+	# Checks for if you have enough money to buy a refresh
+	
+	if (cash - refresh_cost) >= 0:
+		
+		# Substracts refresh cost from total cash
+		
 		cash -= refresh_cost
 		
+		# Increase refresh cost after use
+		
 		refresh_cost += 1
+		
+		# Update refresh button text to new cost
+		
 		$ColorRect/Button.text = "REFRESH $" + str(refresh_cost)
+		
+		# Kill all items in shop
 		
 		for i in shop_items_arr:
 			i.queue_free()
-		shop_items_arr = _create_shop()
+		
+		# Create new shop
+		
+		shop_items_arr = create_shop()
+		
 	else: print("these aint no broke boy cookies :(")
 
-
+# Called when continue button is pressed. Continues game
 func _on_continue_button_pressed() -> void:
+	
+	# Update player's cash
+	
 	player.set_cash(cash)
+	
+	# Update player's inventory
+	
 	player.set_inventory(inventory)
+	
+	# References GameCanvas and calls the reset function
+	
 	$"../../".reset()
+	
+	# Closes the shop
+	
 	self.queue_free()

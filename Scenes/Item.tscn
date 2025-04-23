@@ -2,39 +2,22 @@
 
 [ext_resource type="Script" uid="uid://dtl3stfgkkeny" path="res://Scripts/shop_item.gd" id="1_3r01x"]
 
-[node name="ShopItem" type="Node2D" node_paths=PackedStringArray("label", "button")]
+[node name="Item" type="Node2D"]
 script = ExtResource("1_3r01x")
-label = NodePath("Item/ItemName")
-button = NodePath("Item/BuyButton")
 metadata/_custom_type_script = "uid://dtl3stfgkkeny"
 
-[node name="Item" type="HBoxContainer" parent="."]
+[node name="ItemBox" type="HBoxContainer" parent="."]
 offset_right = 340.0
 offset_bottom = 31.0
 size_flags_horizontal = 3
 
-[node name="ItemName" type="Label" parent="Item"]
+[node name="ItemName" type="Label" parent="ItemBox"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Item 1 | Cost: $0       "
 
-[node name="BuyButton" type="Button" parent="Item"]
+[node name="BuyButton" type="Button" parent="ItemBox"]
 layout_mode = 2
 text = "BUY"
 
-[node name="Item2" type="HBoxContainer" parent="."]
-offset_top = 30.0
-offset_right = 340.0
-offset_bottom = 62.0
-
-[node name="ItemName" type="Label" parent="Item2"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "BIGGGGGGGGGGGG | Cost: $0       "
-
-[node name="BuyButton" type="Button" parent="Item2"]
-layout_mode = 2
-text = "BUY"
-
-[connection signal="pressed" from="Item/BuyButton" to="." method="_on_buy_button_pressed"]
-[connection signal="pressed" from="Item2/BuyButton" to="." method="_on_buy_button_pressed"]
+[connection signal="pressed" from="ItemBox/BuyButton" to="." method="_on_buy_button_pressed"]

@@ -5,7 +5,6 @@
 5. ~~Money making (multiplier)~~
 6. ~~Inventory~~
 7. ~~Gameplay loop completed~~
-   
 ~~END OF FIRST PROTOTYPE~~
 8. Selling items
 9. Inventory size

@@ -5,8 +5,10 @@
 5. ~~Money making (multiplier)~~
 6. ~~Inventory~~
 7. ~~Gameplay loop completed~~
+   
 ~~END OF FIRST PROTOTYPE~~
-9. Selling items/Inventory size
+8. Selling items
+9. Inventory size
 10. Categorizing rounds
 11. FIRST TIME SPREADSHEET: Items/Characters
 12. First spritework

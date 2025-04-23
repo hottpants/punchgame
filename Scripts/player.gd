@@ -127,7 +127,7 @@ func get_cash():
 	return cash
 
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	
 	## KEY FOR rotate_state: 
 	## rotate_state 0: Not moving

@@ -19,7 +19,7 @@ func _ready() -> void:
 	
 	timer.start()
 	
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	
 	# Go up and become more transparent over time
 	

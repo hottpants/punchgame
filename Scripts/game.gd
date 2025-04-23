@@ -9,7 +9,3 @@ func _ready() -> void:
 func reset():
 	$Node3D/Enemy.reset()
 	$Node3D/Player.reset()
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass

@@ -9,7 +9,7 @@ signal decrease_money(item_id, shop_id)
 
 @onready var label = $ItemBox/ItemName
 @onready var button = $ItemBox/BuyButton
-@onready var item_container = $ItemBoxContainer
+@onready var item_container = $ItemBox
 
 ## INFORMATION VARS
 

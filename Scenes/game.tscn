@@ -4,9 +4,21 @@
 [ext_resource type="Script" uid="uid://cnr0m7max3si7" path="res://Scripts/player.gd" id="1_ebmjs"]
 [ext_resource type="Script" uid="uid://bcqcqi8busjy2" path="res://Scripts/enemy.gd" id="2_qxrlw"]
 [ext_resource type="Texture2D" uid="uid://bcef2863o6tqx" path="res://Scripts/BALLSHEARTBALLS.png" id="2_wrm1d"]
-[ext_resource type="PackedScene" uid="uid://gfljrcyrrse1" path="res://Scenes/damage.tscn" id="5_wowpa"]
 
-[sub_resource type="Environment" id="Environment_2poj3"]
+[sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_3dryh"]
+
+[sub_resource type="Sky" id="Sky_wowpa"]
+sky_material = SubResource("PhysicalSkyMaterial_3dryh")
+
+[sub_resource type="Environment" id="Environment_i6g32"]
+background_mode = 2
+background_energy_multiplier = 1.79
+sky = SubResource("Sky_wowpa")
+volumetric_fog_density = 1.0
+volumetric_fog_albedo = Color(1.61238e-06, 0.549889, 9.62615e-07, 1)
+volumetric_fog_anisotropy = 0.9
+volumetric_fog_length = 1024.0
+volumetric_fog_detail_spread = 6.0
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ebmjs"]
 
@@ -30,9 +42,6 @@ albedo_color = Color(6.01634e-08, 0, 0.111867, 1)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wowpa"]
 albedo_color = Color(0.739789, 1.93726e-06, 9.62615e-07, 1)
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_i6g32"]
-viewport_path = NodePath("Node3D/Enemy/HealthBarViewport")
-
 [sub_resource type="SphereMesh" id="SphereMesh_3dryh"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_i6g32"]
@@ -41,16 +50,16 @@ albedo_color = Color(1, 0.509804, 0.203922, 0.372549)
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_wrm1d"]
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_wowpa"]
-viewport_path = NodePath("SubViewport")
+[sub_resource type="ViewportTexture" id="ViewportTexture_3dryh"]
+viewport_path = NodePath("Node3D/Enemy/HealthBarViewport")
 
-[node name="RootCanvas" type="CanvasLayer"]
+[node name="GameCanvas" type="CanvasLayer"]
 script = ExtResource("1_3dryh")
 
 [node name="Node3D" type="Node3D" parent="."]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="Node3D"]
-environment = SubResource("Environment_2poj3")
+environment = SubResource("Environment_i6g32")
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="Node3D"]
 
@@ -60,13 +69,11 @@ size = Vector2i(1152, 648)
 render_target_update_mode = 4
 
 [node name="Camera3D" type="Camera3D" parent="Node3D/SubViewportContainer/SubViewport"]
-transform = Transform3D(1, 0, 0, 0, 0.964433, 0.264328, 0, -0.264328, 0.964433, 0, 2, 2.5)
+transform = Transform3D(1, 0, 0, 0, 0.907616, 0.419801, 0, -0.419801, 0.907616, 0, 2, 1.42266)
 
 [node name="Player" type="CharacterBody3D" parent="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.6371)
 script = ExtResource("1_ebmjs")
-light_damage = 5.0
-heavy_damage = 15.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Node3D/Player"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.63461)
@@ -95,17 +102,20 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_3dryh")
 value = 100.0
 
 [node name="Heart1" type="Sprite2D" parent="Node3D/Player"]
-position = Vector2(299, 118)
+position = Vector2(59.7583, 584.758)
+rotation = -0.168443
 scale = Vector2(0.142857, 0.142857)
 texture = ExtResource("2_wrm1d")
 
 [node name="Heart2" type="Sprite2D" parent="Node3D/Player"]
-position = Vector2(372, 105)
+position = Vector2(132.758, 571.758)
+rotation = -0.168443
 scale = Vector2(0.142857, 0.142857)
 texture = ExtResource("2_wrm1d")
 
 [node name="Heart3" type="Sprite2D" parent="Node3D/Player"]
-position = Vector2(449, 118)
+position = Vector2(209.758, 584.758)
+rotation = -0.168443
 scale = Vector2(0.142857, 0.142857)
 texture = ExtResource("2_wrm1d")
 
@@ -118,7 +128,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_3dryh")
 transform = Transform3D(1, 0, 0, 0, 0.217445, 0.976073, 0, -0.976073, 0.217445, 0.00430346, 3.84141, -0.499136)
 
 [node name="Enemy" type="CharacterBody3D" parent="Node3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55572, -4)
 script = ExtResource("2_qxrlw")
 
 [node name="CollisionBody" type="CollisionShape3D" parent="Node3D/Enemy"]
@@ -128,24 +138,14 @@ shape = SubResource("CapsuleShape3D_qxrlw")
 mesh = SubResource("CapsuleMesh_wrm1d")
 surface_material_override/0 = SubResource("StandardMaterial3D_wowpa")
 
-[node name="EnemyHealthSprite" type="Sprite3D" parent="Node3D/Enemy"]
-transform = Transform3D(1, 0, 0, 0, 0.910777, 0.412898, 0, -0.412898, 0.910777, 0, 1.37585, 0.702548)
-texture = SubResource("ViewportTexture_i6g32")
-
-[node name="Timer" type="Timer" parent="Node3D/Enemy"]
-wait_time = 2.518
-
-[node name="HealthBarTimer" type="Timer" parent="Node3D/Enemy"]
-wait_time = 0.025
-
-[node name="EnemyCDTimer" type="Timer" parent="Node3D/Enemy"]
-wait_time = 0.3
+[node name="AttackTimer" type="Timer" parent="Node3D/Enemy"]
+wait_time = 2.5
 
 [node name="Attack" type="CharacterBody3D" parent="Node3D/Enemy"]
 motion_mode = 1
 
 [node name="AttackMesh" type="MeshInstance3D" parent="Node3D/Enemy/Attack"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4.02323)
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 4.02323)
 mesh = SubResource("SphereMesh_3dryh")
 skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("StandardMaterial3D_i6g32")
@@ -153,7 +153,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_i6g32")
 [node name="Area3D" type="Area3D" parent="Node3D/Enemy/Attack"]
 
 [node name="AttackCollision" type="CollisionShape3D" parent="Node3D/Enemy/Attack/Area3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.19209e-07, 4.02323)
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 1.19209e-07, 4.02323)
 shape = SubResource("SphereShape3D_wrm1d")
 
 [node name="AttackTiming" type="Label3D" parent="Node3D/Enemy"]
@@ -165,14 +165,10 @@ wait_time = 0.5
 [node name="HealthBarViewport" type="SubViewport" parent="Node3D/Enemy"]
 size = Vector2i(360, 20)
 
-[node name="DamageSprite" parent="Node3D" instance=ExtResource("5_wowpa")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.518235, 1.58631, -4.05212)
-texture = SubResource("ViewportTexture_wowpa")
+[node name="EnemyHealthSprite" type="Sprite2D" parent="Node3D/Enemy"]
+position = Vector2(576, 19)
+texture = SubResource("ViewportTexture_3dryh")
 
-[connection signal="timeout" from="Node3D/Enemy/Timer" to="." method="_on_timer_timeout"]
-[connection signal="timeout" from="Node3D/Enemy/Timer" to="Node3D/Enemy" method="_on_timer_timeout"]
-[connection signal="timeout" from="Node3D/Enemy/HealthBarTimer" to="Node3D/Enemy" method="_on_health_bar_timer_timeout"]
-[connection signal="timeout" from="Node3D/Enemy/EnemyCDTimer" to="Node3D/Enemy" method="_on_enemy_cd_timer_timeout"]
-[connection signal="timeout" from="Node3D/Enemy/EnemyCDTimer" to="Node3D/Enemy" method="_on_epictimer_timeout"]
+[connection signal="timeout" from="Node3D/Enemy/AttackTimer" to="Node3D/Enemy" method="_on_attack_timer_timeout"]
 [connection signal="body_entered" from="Node3D/Enemy/Attack/Area3D" to="Node3D/Enemy" method="_on_area_3d_body_entered"]
 [connection signal="timeout" from="Node3D/Enemy/DamageTimer" to="Node3D/Enemy" method="_on_damage_timer_timeout"]

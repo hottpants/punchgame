@@ -1,21 +1,25 @@
 extends Node2D
 class_name ShopItem
 
-signal decreaseMoney(item_id, cost)
+## SIGNALS
+
+signal decrease_money(item_id, shop_id)
+
+## NODES
+
+@onready var label = $ItemBox/ItemName
+@onready var button = $ItemBox/BuyButton
+@onready var item_container = $ItemBoxContainer
+
+## INFORMATION VARS
 
 @export var item_name : String
-@export var label : Label
 @export var cost : int
-@export var button : Button
-@export var item_container : HBoxContainer
 @export var description : String
 var shop_id : int
 var item_id : int
 
-func _ready() -> void:
-	item_name = ""
-	pass
-
+# Sets the data of this item to the stats received from the call of this function
 func _set_stats(new_name : String, new_cost : int, new_description : String, new_id : int, new_shop_id : int):
 	item_name = new_name
 	cost = new_cost
@@ -23,35 +27,47 @@ func _set_stats(new_name : String, new_cost : int, new_description : String, new
 	item_id = new_id
 	shop_id = new_shop_id
 
+# Returns shop id
 func _get_shop_id():
 	return shop_id
 
+# Returns name
 func _get_name():
 	return item_name
 
+# Returns item id
 func _get_id():
 	return item_id
 
-func _buy_object():
+# Marks item as having already been bought
+func buy_item():
+	
+	# Kills button
+	
 	button.queue_free()
+	
+	# Sets label color to green
+	
 	label.add_theme_color_override("font_color",Color("1ad633"))
+
+# Sets physical appearance to match item (label, position, tooltip, and eventually sprite)
+func build_item(y : int):
 	
-func _build_object(x: int, y: int):
-	item_container = HBoxContainer.new()
-	add_child(item_container)
-	label = Label.new()
-	button = Button.new()
-	item_container.add_child(label)
-	item_container.set_alignment(BoxContainer.ALIGNMENT_BEGIN)
-	label.set_h_size_flags(2)
+	# Sets tooltip of button
 	
-	item_container.add_child(button)
-	button.pressed.connect(_on_button_pressed)
-	button.text = "BUY"
 	button.set_tooltip_text(description)
-	item_container.set_size(Vector2(340,32))
-	label.text = item_name + " | Cost: $" + str(cost) + "       "
-	position = Vector2(x,y)
 	
-func _on_button_pressed() -> void:
-	decreaseMoney.emit(item_id, shop_id)
+	# Sets label text to display item name and cost
+	
+	label.text = item_name + " | Cost: $" + str(cost) + "       "
+	
+	# Sets location
+	
+	position = Vector2(50, y)
+
+# Called when buy button is pressed
+func _on_buy_button_pressed() -> void:
+	
+	# Emits signal to decrease money and buy item
+	
+	decrease_money.emit(item_id, shop_id)

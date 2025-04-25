@@ -12,6 +12,7 @@ offset_right = 697.0
 offset_bottom = 648.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+mouse_filter = 2
 color = Color(0.803922, 0.4, 0.286275, 0.882353)
 
 [node name="ItemContainer" type="HBoxContainer" parent="ColorRect"]
@@ -23,9 +24,9 @@ offset_bottom = 41.0
 [node name="Button" type="Button" parent="ColorRect"]
 layout_mode = 0
 offset_left = 145.0
-offset_top = 104.0
+offset_top = 203.0
 offset_right = 221.0
-offset_bottom = 135.0
+offset_bottom = 234.0
 text = "REFRESH"
 
 [node name="ContinueButton" type="Button" parent="ColorRect"]
@@ -47,9 +48,9 @@ text = "Continue?"
 [node name="VBoxContainer" type="VBoxContainer" parent="ColorRect"]
 layout_mode = 0
 offset_left = 12.0
-offset_top = 186.0
+offset_top = 285.0
 offset_right = 85.0
-offset_bottom = 226.0
+offset_bottom = 325.0
 
 [node name="ColorRect" type="ColorRect" parent="ColorRect"]
 layout_mode = 0
@@ -61,9 +62,9 @@ color = Color(0.176419, 0.176419, 0.176419, 1)
 [node name="Cash" type="Label" parent="ColorRect"]
 layout_mode = 0
 offset_left = 50.0
-offset_top = 105.0
+offset_top = 204.0
 offset_right = 109.0
-offset_bottom = 128.0
+offset_bottom = 227.0
 text = "MONEY"
 
 [connection signal="pressed" from="ColorRect/Button" to="." method="_on_button_pressed"]

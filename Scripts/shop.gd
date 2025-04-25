@@ -39,10 +39,32 @@ func _ready() -> void:
 	var gun_item = {"Name": "Gun", "Cost": 63, "Chance": 3, "Description": "Parry this!", "id": 6}
 	var baseballbat_item = {"Name": "Baseball Bat", "Cost": 17, "Chance": 3, "Description": "Guh!", "id": 7}
 	var tophat_item = {"Name": "Top Hat", "Cost": 60, "Chance": 3, "Description": "For capitalist pigs", "id": 8}
+	var knife_item = {"Name": "Knife", "Cost": 14, "Chance": 2, "Description": "Like a tiny little sword", "id": 9}
+	var rolex_item = {"Name": "Rolex", "Cost": 100, "Chance": 2, "Description": "Get your money up not your funny up", "id": 10}
+	var steroids_item = {"Name": "Steroids", "Cost": 38, "Chance": 1, "Description": "Shrinks yer balls", "id": 11}
+	var chewinggum_item = {"Name": "Chewing Gum", "Cost": 15, "Chance": 1, "Description": "Lock in.", "id": 12}
+	var worminfestedfruit_item = {"Name": "Worm-Infested Fruit", "Cost": 10, "Chance": 1, "Description": "Reeks of poison", "id": 13}
+	var worminfestedflesh_item = {"Name": "Worm-Infested Flesh", "Cost": 75, "Chance": 2, "Description": "Reeks of rot", "id": 14}
+	var worminfestedore_item = {"Name": "Worm-Infested Ore", "Cost": 190, "Chance": 3, "Description": "Reeks of uneasieness", "id": 15}
+	var worminfestedrelic_item = {"Name": "Worm-Infested Relic", "Cost": 450, "Chance": 4, "Description": "Reeks of disaster", "id": 16}
+	var crowbar_item = {"Name": "Crowbar", "Cost": 20, "Chance": 1, "Description": "What is this? A half life too?", "id": 17}
+	var fryingpan_item = {"Name": "Frying Pan", "Cost": 30, "Chance": 2, "Description": "Used by amateurs", "id": 18}
+	var goldfryingpan_item = {"Name": "Golden Frying Pan", "Cost": 120, "Chance": 4, "Description": "Used by professionals", "id": 19}
+	var fjhotsauce_item = {"Name": "Freaky John's Hot Sauce", "Cost": 50, "Chance": 2, "Description": "Freaky John thought his juice might come in handy!", "id": 20}
+	var fjsweatysockslingshot_item = {"Name": "Freaky John's Sweaty Sock Slingshot", "Cost": 12, "Chance": 1, "Description": "Freaky John's favorite way to clear a room!", "id": 21}
+	var fjunpickledcucumberjar_item = {"Name": "Freaky John's Unpickled Cucumber Jar", "Cost": 70, "Chance": 2, "Description": "Crunchy and tastes nothing like cucumber!", "id": 22}
+	var fjputridpicklejar_item = {"Name": "Freaky John's Putrid Pickle Jar", "Cost": 140, "Chance": 3, "Description": "Freaky John's favorite mid-morning snack", "id": 23}
+	var fjcalamitycube_item = {"Name": "Freaky John's Calamity Cube", "Cost": 190, "Chance": 4, "Description": "Even Freaky John can't solve this thing!", "id": 24}
+	var thecommunistmanifesto_item = {"Name": "The Communist Manifesto", "Cost": 15, "Chance": 4, "Description": "Karl Marx would be proud!", "id": 24}
+	#var _item = {"Name": "", "Cost": , "Chance": , "Description": "", "id": }
 	
 	# Array of dictionaries to keep them all in one spot
 	
-	items = [balls_item, peenor_item, brassknuckles_item, jockstrap_item, bong_item, holyhandgrenade_item, gun_item, baseballbat_item, tophat_item]
+	items = [balls_item, peenor_item, brassknuckles_item, jockstrap_item, bong_item, holyhandgrenade_item, gun_item, 
+	baseballbat_item, tophat_item, knife_item, rolex_item, steroids_item, chewinggum_item, worminfestedfruit_item, 
+	worminfestedflesh_item, worminfestedore_item, worminfestedrelic_item, crowbar_item, fryingpan_item, goldfryingpan_item, 
+	fjhotsauce_item, fjsweatysockslingshot_item, fjunpickledcucumberjar_item, fjputridpicklejar_item, fjcalamitycube_item,
+	thecommunistmanifesto_item]
 	
 	# Creates an instance of inventory.tscn
 	
@@ -55,6 +77,8 @@ func _ready() -> void:
 	# Set the inventory of inventory_manager to the player's inventory
 	
 	inventory_manager.set_inventory(player.get_inventory())
+	
+	inventory_manager.item_sold.connect(reset_inventory)
 	
 	# Set shop inventory to player inventory
 	
@@ -255,6 +279,9 @@ func _on_button_pressed() -> void:
 # Called when continue button is pressed. Continues game
 func _on_continue_button_pressed() -> void:
 	
+	for i in inventory: print("Inventory: " + i["Name"])
+	print("-----------")
+	
 	# Update player's cash
 	
 	player.set_cash(cash)
@@ -270,3 +297,10 @@ func _on_continue_button_pressed() -> void:
 	# Closes the shop
 	
 	self.queue_free()
+
+func reset_inventory(_item_list):
+	inventory = _item_list
+	exclude_items = _item_list
+	print("BALLS: " + str(_item_list))
+	
+	

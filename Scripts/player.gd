@@ -2,16 +2,20 @@ extends CharacterBody3D
 
 ## DAMAGE VARS
 
-var light_damage := 5 # Light attack damage
-var heavy_damage := 15 # Heavy attack damage
+const LIGHT_DAMAGE := 5 # Light attack damage
+const HEAVY_DAMAGE := 15 # Heavy attack damage
 var light_multiplier := 1.0 # Light attack damage multiplier
 var heavy_multiplier := 1.0 # Heavy attack damage multiplier
+var light_flat := 0.0
+var heavy_flat := 0.0
+var crit_chance := 0.05
+var crit_multiplier := 2.0
 
 ## BASE STAT VARS
 
 var health := 3 # Health
 var stage := 1 # Stage - Determines amount of money received from winning, item drops, chances for higher enemies and rarer items in shop
-var cash := 0 # Cash
+var cash := 100000 # Cash
 var player_inventory : Array # Inventory of the player. Stores Dictionaries which contain item data
 var inventory_size := 6 # Size of the inventory (Currently not implemented)
 
@@ -29,16 +33,31 @@ var focus_dodge_min := 25.0 # Focus required to start a dodge
 var focus_light_min := 4 # Focus required to do a light attack
 var focus_heavy_min := 35 # Focus required to do a heavy attack
 
+## POISON VARS
+
+const POISON_DAMAGE := 5
+var poison_light_chance := 0.0
+var poison_heavy_chance := 0.0
+var poison_all_chance := 0.0
+var poison_stacks := 0
+var poison_damage_multiplier := 1.0
+var poison_stacks_cached := 0
+var poison_damage_sum := 0
+
 ## MISC VARS
 
 var dodge_chance := 0.0 # Chance to dodge an attack
 var heal_on_punch_chance := 0.0 # Chance to heal on doing an attack
 var fp_drain_reduction := 1.0 # Multiplier reducing focus drain
+var payout_multiplier := 1.0 # Multiplier increasing payout
 
 ## SCENE VARS
 
 @onready var shop_scene = load("res://Scenes/shop.tscn") # shop.tscn
 
+## NODE VARS
+
+@onready var p_timer = $PoisonTimer
 
 func _ready() -> void:
 	pass
@@ -73,6 +92,12 @@ func check_items():
 	dodge_chance = 0.0
 	heal_on_punch_chance = 0.0
 	fp_drain_reduction = 1.0
+	payout_multiplier = 1.0
+	
+	poison_light_chance = 0.0
+	poison_heavy_chance = 0.0
+	poison_damage_multiplier = 1.0
+	poison_stacks = 0
 	
 	# Checks ids of each item in inventory
 	
@@ -99,6 +124,44 @@ func check_items():
 			8: # Top hat
 				light_multiplier += float(cash)/100
 				heavy_multiplier += float(cash)/100
+			9: # Knife
+				light_multiplier += 0.25
+			10: # Rolex
+				payout_multiplier += 0.1
+			11: # Steroids
+				pass
+			12: # Chewing gum
+				pass
+			13: # Worm-Infested Fruit
+				poison_light_chance += 0.05
+			14: # Worm-Infested Flesh
+				poison_light_chance += 0.10
+				poison_damage_multiplier += 0.25
+			15: # Worm-Infested Ore
+				poison_light_chance += 0.15
+				poison_heavy_chance += 0.15
+				poison_damage_multiplier += 0.50
+			16: # Worm-Infested Relic
+				poison_all_chance += 0.15
+				poison_damage_multiplier += (poison_stacks_cached * 0.05)
+			17: # Crowbar
+				pass
+			18: # Frying Pan
+				pass
+			19: # Golden Frying Pan
+				pass
+			20: # FJ's Hot Sauce
+				pass
+			21: # FJ's Sweaty Sock Slingshot
+				pass
+			22: # FJ's Unpickled Cucumber Jar
+				pass
+			23: # FJ's Putrid Pickle Jar
+				pass
+			24: # FJ's Calamity Cube
+				pass
+			25: # The Communist Manifesto
+				pass
 			_:
 				return
 
@@ -114,9 +177,13 @@ func get_inventory():
 func _get_stage():
 	return stage
 
+# Returns payout multiplier
+func get_payout_multiplier():
+	return payout_multiplier
+
 # Increases cash based on the amount passed when function is called
 func pay(amount : int):
-	cash += amount
+	cash += amount * payout_multiplier
 
 # Set cash equal to the amount passed when function is called
 func set_cash(amount : int):
@@ -174,11 +241,16 @@ func _physics_process(_delta: float) -> void:
 		
 		# Damage enemy
 		
-		$"../Enemy".damage_enemy(light_damage * light_multiplier)
+		$"../Enemy".damage_enemy((LIGHT_DAMAGE + light_flat) * light_multiplier * roll_crit())
 		
 		# Check for heal on punch
 		
 		heal_on_punch()
+		
+		if roll_poison(poison_light_chance + poison_all_chance):
+			poison_stacks += 1
+			if p_timer.is_stopped():
+				p_timer.start()
 	
 	# If attack_heavy has been just pressed AND player is not rotating AND has more focus than focus required for a heavy attack then do a heavy attack
 	
@@ -190,8 +262,13 @@ func _physics_process(_delta: float) -> void:
 		
 		# Damage enemy
 		
-		$"../Enemy".damage_enemy(heavy_damage * heavy_multiplier)
-	
+		$"../Enemy".damage_enemy((HEAVY_DAMAGE + heavy_flat) * heavy_multiplier * roll_crit())
+		
+		if roll_poison(poison_heavy_chance + poison_all_chance):
+			poison_stacks += 1
+			if p_timer.is_stopped():
+				p_timer.start()
+		
 	# Used for debugging
 	
 	if Input.is_action_just_pressed("change_to_shop"):
@@ -200,7 +277,8 @@ func _physics_process(_delta: float) -> void:
 
 
 func _process(delta: float) -> void:
-	
+	if !$"../Enemy".alive:
+		p_timer.stop()
 	# Set hearts equal to total health
 	
 	match health:
@@ -254,9 +332,32 @@ func _lose_health(amount: int):
 	else:
 		health -= amount
 
+func roll_poison(poison_chance : float):
+	var rand = randf_range(0.0, 1.0)
+	if poison_chance > rand:
+		return true
+	else: return false
+
+# Rolls for crit, if successful, returns crit_multiplier, else returns 1.0
+func roll_crit():
+	var rand = randf_range(0.0, 1.0)
+	if crit_chance > rand:
+		return crit_multiplier
+	else: return 1.0
+
 # Checks to see if the player's health is increased based on item chance rolls
 func heal_on_punch():
 	var rand = randf_range(0.0, 1.0)
 	if heal_on_punch_chance > rand and health != 3:
 		health += 1
 		print("HEALED!")
+
+func _on_poison_timer_timeout() -> void:
+	poison_damage_sum = 0
+	if $"../Enemy".alive:
+		for i in range(poison_stacks):
+			poison_damage_sum += POISON_DAMAGE * poison_damage_multiplier
+			if roll_poison(poison_all_chance):
+				poison_stacks += 1
+		poison_stacks_cached += 1
+		$"../Enemy".damage_enemy(poison_damage_sum)

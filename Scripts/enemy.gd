@@ -54,7 +54,7 @@ func die():
 func reset():
 	spawn_health_bar()
 	set_attack()
-	enemy_max_health = 100 # Placeholder. Going to be equal to whatever health value is given from specific enemy from enemy table
+	enemy_max_health = 100#pow(100, $"../Player"._get_stage()) # Placeholder. Going to be equal to whatever health value is given from specific enemy from enemy table
 	
 	# Calls function init_health from enemy_health_bar and sets max health to enemy_max_health
 	
@@ -215,3 +215,10 @@ func _on_attack_timer_timeout() -> void:
 		attack_is_active = true
 		attack_finished = false
 		attack_choice = rand_attack_choice
+
+
+
+## for i in range(5):
+## 	var bob = load(Bob).instantiate()
+## 	add_child(bob)
+## 	bob.change(i*5)

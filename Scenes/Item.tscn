@@ -7,7 +7,7 @@ script = ExtResource("1_3r01x")
 metadata/_custom_type_script = "uid://dtl3stfgkkeny"
 
 [node name="ItemBox" type="HBoxContainer" parent="."]
-offset_right = 340.0
+offset_right = 568.0
 offset_bottom = 31.0
 size_flags_horizontal = 3
 

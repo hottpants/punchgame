@@ -119,6 +119,8 @@ rotation = -0.168443
 scale = Vector2(0.142857, 0.142857)
 texture = ExtResource("2_wrm1d")
 
+[node name="PoisonTimer" type="Timer" parent="Node3D/Player"]
+
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D"]
 transform = Transform3D(50, 0, 0, 0, 50, 0, 0, 0, 50, 0, -1.37889, 0)
 mesh = SubResource("PlaneMesh_wrm1d")
@@ -128,7 +130,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_3dryh")
 transform = Transform3D(1, 0, 0, 0, 0.217445, 0.976073, 0, -0.976073, 0.217445, 0.00430346, 3.84141, -0.499136)
 
 [node name="Enemy" type="CharacterBody3D" parent="Node3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55572, -4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
 script = ExtResource("2_qxrlw")
 
 [node name="CollisionBody" type="CollisionShape3D" parent="Node3D/Enemy"]
@@ -169,6 +171,7 @@ size = Vector2i(360, 20)
 position = Vector2(576, 19)
 texture = SubResource("ViewportTexture_3dryh")
 
+[connection signal="timeout" from="Node3D/Player/PoisonTimer" to="Node3D/Player" method="_on_poison_timer_timeout"]
 [connection signal="timeout" from="Node3D/Enemy/AttackTimer" to="Node3D/Enemy" method="_on_attack_timer_timeout"]
 [connection signal="body_entered" from="Node3D/Enemy/Attack/Area3D" to="Node3D/Enemy" method="_on_area_3d_body_entered"]
 [connection signal="timeout" from="Node3D/Enemy/DamageTimer" to="Node3D/Enemy" method="_on_damage_timer_timeout"]

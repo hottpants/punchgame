@@ -11,7 +11,7 @@ signal health_zero # Signal emitted when health is zero
 
 ## HEALTH VARS
 
-var health = 0 : set = _set_health # Health value 
+var health = 0 #: set = _set_health # Health value 
 
 # Set health equal to a new health (from taking damage or healing or whatnot)
 func _set_health(new_health):
@@ -38,7 +38,6 @@ func _set_health(new_health):
 # Initialize health to _health. Function is called from enemy
 func init_health(_health):
 		health = _health
-		
 		# Max value of health progress bar and current value of progress bar get set to health value passed from function
 		
 		max_value = health

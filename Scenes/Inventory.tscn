@@ -6,22 +6,19 @@
 script = ExtResource("1_ersrd")
 
 [node name="ColorRect2" type="ColorRect" parent="."]
-offset_right = 707.0
+offset_right = 1152.0
 offset_bottom = 70.0
-color = Color(0.233485, 0.125002, 0.104854, 1)
+mouse_filter = 2
+color = Color(0.154876, 0.154876, 0.154876, 1)
 
 [node name="ColorRect" type="ColorRect" parent="ColorRect2"]
 layout_mode = 0
 offset_left = 5.0
 offset_top = 25.0
-offset_right = 702.0
+offset_right = 1147.0
 offset_bottom = 65.0
-color = Color(1, 1, 1, 0.145098)
-
-[node name="HBoxContainer" type="HBoxContainer" parent="ColorRect2/ColorRect"]
-layout_mode = 0
-offset_right = 697.0
-offset_bottom = 40.0
+mouse_filter = 2
+color = Color(1, 0.605628, 0.559041, 0.145098)
 
 [node name="Label" type="Label" parent="ColorRect2"]
 layout_mode = 1
